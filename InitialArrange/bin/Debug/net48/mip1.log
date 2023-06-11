@@ -1,0 +1,154 @@
+
+Gurobi 9.5.2 (win64, .NET) logging started Mon Nov 28 12:09:09 2022
+
+Set parameter Username
+Set parameter LogFile to value "mip1.log"
+Academic license - for non-commercial use only - expires 2023-10-25
+Set parameter NonConvex to value 2
+Set parameter PoolSearchMode to value 2
+Set parameter PoolGap to value 3
+Set parameter PoolSolutions to value 2
+Set parameter TimeLimit to value 80
+Gurobi Optimizer version 9.5.2 build v9.5.2rc0 (win64)
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 374 rows, 308 columns and 1342 nonzeros
+Model fingerprint: 0xd29ccdb5
+Model has 6 quadratic objective terms
+Model has 16556 quadratic constraints
+Variable types: 0 continuous, 308 integer (264 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+01]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+01, 1e+02]
+  Objective range  [1e-02, 7e-01]
+  QObjective range [5e-03, 1e-02]
+  Bounds range     [1e+00, 6e+01]
+  RHS range        [1e+00, 7e+01]
+  QRHS range       [1e+01, 6e+03]
+Presolve added 16544 rows and 44 columns
+Presolve time: 0.18s
+Presolved: 17073 rows, 429 columns, 68064 nonzeros
+Presolved model has 6 quadratic objective terms
+Presolved model has 11 quadratic constraint(s)
+Presolved model has 77 bilinear constraint(s)
+Variable types: 44 continuous, 385 integer (264 binary)
+
+Root relaxation: objective 4.662278e+01, 571 iterations, 0.05 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   46.62278    0  140          -   46.62110      -     -    0s
+     0     0   46.62266    0  175          -   46.62110      -     -    1s
+     0     0   46.62266    0  169          -   46.62110      -     -    1s
+     0     0   46.62200    0  195          -   46.62110      -     -    2s
+     0     0   46.62171    0  196          -   46.62110      -     -    2s
+
+Gurobi 9.5.2 (win64, .NET) logging started Mon Nov 28 12:17:54 2022
+
+Set parameter Username
+Set parameter LogFile to value "mip1.log"
+Academic license - for non-commercial use only - expires 2023-10-25
+Set parameter NonConvex to value 2
+Set parameter PoolSearchMode to value 2
+Set parameter PoolGap to value 3
+Set parameter PoolSolutions to value 2
+Set parameter TimeLimit to value 80
+Gurobi Optimizer version 9.5.2 build v9.5.2rc0 (win64)
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 374 rows, 308 columns and 1342 nonzeros
+Model fingerprint: 0xd29ccdb5
+Model has 6 quadratic objective terms
+Model has 16556 quadratic constraints
+Variable types: 0 continuous, 308 integer (264 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+01]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+01, 1e+02]
+  Objective range  [1e-02, 7e-01]
+  QObjective range [5e-03, 1e-02]
+  Bounds range     [1e+00, 6e+01]
+  RHS range        [1e+00, 7e+01]
+  QRHS range       [1e+01, 6e+03]
+Presolve added 16544 rows and 44 columns
+Presolve time: 0.14s
+Presolved: 17073 rows, 429 columns, 68064 nonzeros
+Presolved model has 6 quadratic objective terms
+Presolved model has 11 quadratic constraint(s)
+Presolved model has 77 bilinear constraint(s)
+Variable types: 44 continuous, 385 integer (264 binary)
+
+Root relaxation: objective 4.662278e+01, 571 iterations, 0.04 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   46.62278    0  140          -   46.62110      -     -    0s
+     0     0   46.62266    0  175          -   46.62110      -     -    1s
+     0     0   46.62266    0  169          -   46.62110      -     -    1s
+     0     0   46.62200    0  195          -   46.62110      -     -    1s
+     0     0   46.62171    0  196          -   46.62110      -     -    1s
+     0     0   46.61978    0  189          -   46.61978      -     -    2s
+     0     0   46.61978    0  198          -   46.61978      -     -    2s
+     0     0   46.61648    0  197          -   46.61648      -     -    2s
+     0     0   46.61648    0  207          -   46.61648      -     -    2s
+     0     0   46.61648    0  215          -   46.61648      -     -    3s
+     0     0   46.61648    0  213          -   46.61648      -     -    3s
+     0     0   46.61445    0  219          -   46.61445      -     -    4s
+     0     0   46.61445    0  218          -   46.61445      -     -    4s
+     0     0   46.61445    0  219          -   46.61445      -     -    4s
+     0     2   46.57132    0  219          -   46.57132      -     -    4s
+     1     4   46.57132    1  219          -   46.57132      -  59.0    5s
+   711   292 infeasible   74               -   46.57132      -  32.8   10s
+   973   329   46.57132   20  184          -   46.57132      -  39.0   15s
+  1270   414   46.38498   51  109          -   46.57132      -  40.1   20s
+  1707   545   46.57132   27  175          -   46.57132      -  41.1   25s
+
+Gurobi 9.5.2 (win64, .NET) logging started Mon Nov 28 12:23:06 2022
+
+Set parameter Username
+Set parameter LogFile to value "mip1.log"
+Academic license - for non-commercial use only - expires 2023-10-25
+Set parameter NonConvex to value 2
+Set parameter PoolSearchMode to value 2
+Set parameter PoolGap to value 3
+Set parameter PoolSolutions to value 2
+Set parameter TimeLimit to value 80
+Gurobi Optimizer version 9.5.2 build v9.5.2rc0 (win64)
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+Optimize a model with 374 rows, 308 columns and 1342 nonzeros
+Model fingerprint: 0xd29ccdb5
+Model has 6 quadratic objective terms
+Model has 16556 quadratic constraints
+Variable types: 0 continuous, 308 integer (264 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 5e+01]
+  QMatrix range    [1e+00, 2e+00]
+  QLMatrix range   [2e+01, 1e+02]
+  Objective range  [1e-02, 7e-01]
+  QObjective range [5e-03, 1e-02]
+  Bounds range     [1e+00, 6e+01]
+  RHS range        [1e+00, 7e+01]
+  QRHS range       [1e+01, 6e+03]
+Presolve added 16544 rows and 44 columns
+Presolve time: 0.21s
+Presolved: 17073 rows, 429 columns, 68064 nonzeros
+Presolved model has 6 quadratic objective terms
+Presolved model has 11 quadratic constraint(s)
+Presolved model has 77 bilinear constraint(s)
+Variable types: 44 continuous, 385 integer (264 binary)
+
+Root relaxation: objective 4.662278e+01, 571 iterations, 0.05 seconds (0.03 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   46.62278    0  140          -   46.62110      -     -    0s
+     0     0   46.62266    0  175          -   46.62110      -     -    1s
+     0     0   46.62266    0  169          -   46.62110      -     -    1s
+     0     0   46.62200    0  195          -   46.62110      -     -    2s
+     0     0   46.62171    0  196          -   46.62110      -     -    2s
+     0     0   46.61978    0  189          -   46.61978      -     -    3s
+     0     0   46.61978    0  198          -   46.61978      -     -    3s
+     0     0   46.61648    0  197          -   46.61648      -     -    4s
+     0     0   46.61648    0  207          -   46.61648      -     -    4s

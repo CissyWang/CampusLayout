@@ -1,0 +1,102 @@
+{
+  "format": 1,
+  "restore": {
+    "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {}
+  },
+  "projects": {
+    "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj",
+        "projectName": "IndexCalculate",
+        "projectPath": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj",
+        "packagesPath": "C:\\Users\\name\\.nuget\\packages\\",
+        "outputPath": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\name\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.412\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+        "projectName": "InitialArrange",
+        "projectPath": "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+        "packagesPath": "C:\\Users\\name\\.nuget\\packages\\",
+        "outputPath": "F:\\grasshopper_C#\\Campus\\InitialArrange\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\name\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {
+              "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj": {
+                "projectPath": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.3.2, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.2.0, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.412\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "mwpEqGsYVDsUKSoq+JrjZwIBCAzrQQuolbYKVvat02Fz60v2Nq8TDNtC9I9SHvyQf7YecNa4F6fuXfEKHBis2w==",
+  "success": true,
+  "projectFilePath": "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\name\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
+    "C:\\Users\\name\\.nuget\\packages\\microsoft.codecoverage\\17.3.2\\microsoft.codecoverage.17.3.2.nupkg.sha512",
+    "C:\\Users\\name\\.nuget\\packages\\microsoft.net.test.sdk\\17.3.2\\microsoft.net.test.sdk.17.3.2.nupkg.sha512"
+  ],
+  "logs": []
+}
