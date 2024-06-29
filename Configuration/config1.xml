@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--每次的配置文件要可以存储-->
+<!--unit: m-->
+<configuration>
+
+	<basic>
+		<unit>20</unit>
+		<resultCount>5</resultCount>
+		<time>200.0</time>
+		<!--searchMode:  0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解-->
+		<searchMode>2</searchMode>
+		<!--0=false, 1=true-->
+		<isInteger> 0 </isInteger>
+	</basic>
+	
+	<filepath>
+		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
+		<zoneFile> ../../南工职大/应用/export1.2.csv </zoneFile>
+		<siteFile>../../南工职大/应用/site0.csv</siteFile>
+		<locationFile>../../location_newtest.csv</locationFile>
+	</filepath>
+	
+	<weights>
+		<areaWeight>0.5</areaWeight>
+		<distWeight>1</distWeight>
+	</weights>
+	
+	<Shape>
+		<!--长宽比-->
+		<LenToWidth>2</LenToWidth>
+		<!--间距-->
+		<Spacing>12</Spacing>
+		<!--面积浮动范围-->
+		<AreaFloats min="1" max="1.4"/>
+		<!--密度-->
+		<Density>0.7</Density>
+		<!--子分区 分配面积下限-->
+		<AreaSep>0.7</AreaSep>
+		<!--运动场尺寸-->
+		<SportArea>
+			<Width>150</Width>
+			<Length>230</Length>
+		</SportArea>
+		<!--总体最小边长-->
+		<MinLength>60</MinLength>
+	</Shape>
+	
+	<Topology>
+		<RoadLinks>
+			<RoadLink type="near" zoneID="{1}" num="1" roadNum="0"/>
+			<RoadLink type="align" zoneID="{6}" roadNum="2"/>
+			<RoadLink type="oneSide" zoneID="{13,14,16,17}" side="1" roadNum="1"/>
+			<RoadLink type="oneSide" zoneID="{15,18}" side="1" roadNum="3"/>
+		</RoadLinks>
+		<PointLinks>
+			<PointLink zoneID="{1}" poiNum="0"/>
+			<PointLink zoneID="{6}" num="{1}" poiNum="2"/>
+		</PointLinks>
+		<ZoneLinks>
+			<ZoneLink type="near" zoneID="{4,19}" />
+			<ZoneLink type="subZoneAway" zoneID="{8}" />
+		</ZoneLinks>
+	</Topology>
+	
+	<StructureElements>
+		<!--type: Core Axis Group Grid-->
+		<Core width="20">
+			<Domain xrange="{24,28}" yrange ="{21,24}" widthDomain ="{6,16}"	lengthDomain="{16,20}"/>
+			<!--<Domain xrange="{24,28}" yrange ="{21,24}"/> 只限定中心点坐标-->
+			<maximizeWeight>-1</maximizeWeight>
+			<insideZone isOnly="true" isAlign="true" zoneID="{4,7,9}"></insideZone>
+			<!--<outsideZone isOnly="1" isAlign="1" zoneID="{1}"></insideZone>-->
+		</Core>
+
+		<Axes>
+			<Axis id="0" startPt="{41.6,26}" endPt ="{41.6,59}" width="16">
+				<asAbstractAxis  zoneID="{3}"/>
+				<asRealAxis onCenter="true" buffer="200" zoneID="{0,3,5,11}"/>
+			</Axis>
+		</Axes>
+
+		<Groups>
+			<Group id="0" maximizeWeight="0.3" zoneID="{0,5,3,9}"/>
+			<Group id="1" maximizeWeight="0.3" zoneID="{10,11,12}"/>
+		</Groups>
+
+		<Grids>
+			<xGrid id="0"  width="0.5">
+				<domain>
+					<yrange min="8" max="13"/>
+					<xrange startX="0" startY="39"/>
+				</domain>
+			</xGrid>
+			<yGrid id="0"  width="0.5">
+				<domain>
+					<xrange min="27" max="35"/>
+					<yrange startX="0" startY="22"/>
+				</domain>
+			</yGrid>
+		</Grids>
+		
+
+	</StructureElements>
+</configuration>

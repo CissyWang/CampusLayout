@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--unit: m-->
+<!--test 4.1 场地测试-->
+<!--问题记录
+*1.boundry保留两位小数比保留一位要快（结果不一样，数值差不多）
+*2.minus超出范围计算不出来
+ *3.不同的searchMode计算结果和耗时不一样：1最慢，0中等，2最快（由最优到满足限制）
+（0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解）
+*4.对面积（总面积）限制合理可以算得更快-->
+
+<configuration>
+
+	<basic>
+		<unit>20</unit>
+		<resultCount>5</resultCount>
+		<time>30</time>
+		<!--searchMode:  0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解-->
+		<searchMode>0</searchMode>
+		<!--0=false, 1=true-->
+		<isInteger> 0 </isInteger>
+	</basic>
+	<filepath>
+		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
+		<zoneFile> ../../test/4.1/export.csv </zoneFile>
+		<siteFile>../../test/4.1/site1.csv</siteFile>
+		<locationFile>../../test/4.1/locationT.csv</locationFile>
+	</filepath>
+	<weights>
+		<areaWeight>1</areaWeight>
+		<distWeight>0</distWeight>
+	</weights>
+	<Shape>
+		<!--长宽比-->
+		<LenToWidth>2</LenToWidth>
+		<!--最小边长-->
+		<MinLength>60</MinLength>
+		<!--间距-->
+		<Spacing>8</Spacing>
+
+		<!--密度-->
+		<!--<Density>0.7</Density>
+		<TotalArea>300000</TotalArea>-->
+	</Shape>
+	<Topology>
+	</Topology>
+	
+	<StructureElements>
+		<!--type: Core Axis Group Grid-->
+	</StructureElements>
+</configuration>

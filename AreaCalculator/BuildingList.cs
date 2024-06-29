@@ -28,7 +28,7 @@ namespace IndexCalculate
                 string[] str = strLine.Split(',');
                 string name = str[0];
 
-                string district_name = str[str.Length - 4];
+                string zone_name = str[str.Length - 4];
             
                 double[] area1 = new double[str.Length - 5];
                 for (int i = 0; i < area1.Length; i++)
@@ -38,7 +38,7 @@ namespace IndexCalculate
                 int layer1 = int.Parse(str[str.Length-3]);
                 double density1 = double.Parse(str[str.Length-2]);
 
-                this.AddBuilding(index,name, layer1, area1, density1,district_name);
+                this.AddBuilding(index,name, layer1, area1, density1,zone_name);
                 index++;
             }
         }
@@ -51,7 +51,7 @@ namespace IndexCalculate
         }
 
         //加入建筑，根据人数规模选择对应的人均面积要求
-        internal int AddBuilding(int index,string building_name, int building_layer, double[] building_area_pers, double density, string district_name)
+        internal int AddBuilding(int index,string building_name, int building_layer, double[] building_area_pers, double density, string zone_name)
         {
             int k = (int)campus.scType;
             int pop = campus.population;
@@ -88,7 +88,7 @@ namespace IndexCalculate
             }
 
             buildings.Add(new Building(index,building_name, building_layer, 
-                building_per * campus.population, density,district_name));
+                building_per * campus.population, density,zone_name));
             return this.Count;
         }
 
@@ -155,6 +155,16 @@ namespace IndexCalculate
                 site_area_all += this[i].Site_area;
             }
             return site_area_all;
+        }
+
+        public double averageLayer()
+        {
+            double part=0;
+            foreach (Building b in buildings)
+            {
+                part += b.Layer * b.Floor_area;
+            }
+            return  part / this.FloorArea_all();
         }
 
         //像数组一样返回元素

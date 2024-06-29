@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "mwpEqGsYVDsUKSoq+JrjZwIBCAzrQQuolbYKVvat02Fz60v2Nq8TDNtC9I9SHvyQf7YecNa4F6fuXfEKHBis2w==",
+  "dgSpecHash": "ZCPc51nU+GIrVUyPacFgh1wSuP7v/SQf8N5tP1oP/HMUBZh/UT2HvHyjV88T9kBf71e9ZnoTVVAseAnCuXaovQ==",
   "success": true,
-  "projectFilePath": "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+  "projectFilePath": "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\name\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
-    "C:\\Users\\name\\.nuget\\packages\\microsoft.codecoverage\\17.3.2\\microsoft.codecoverage.17.3.2.nupkg.sha512",
-    "C:\\Users\\name\\.nuget\\packages\\microsoft.net.test.sdk\\17.3.2\\microsoft.net.test.sdk.17.3.2.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.codecoverage\\17.3.2\\microsoft.codecoverage.17.3.2.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.net.test.sdk\\17.3.2\\microsoft.net.test.sdk.17.3.2.nupkg.sha512"
   ],
   "logs": []
 }

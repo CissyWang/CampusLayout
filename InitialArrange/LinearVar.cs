@@ -8,33 +8,43 @@ using Gurobi;
 
 namespace InitialArrange
 {
-    class LinearVar
+    public class LinearVar
     {
-        string name;
-        internal int direction;
-        internal GRBVar road;
-        internal float width;
-        List<Line> resultLine = new List<Line>();
-        internal Domain[] range;
-        GRBModel model;
-        Site site;
-        internal List<int> districtsLorB;
-        internal List<int> districtsRorT;
+        int index;
+        int direction;
+        float stroke;
+        Domain[] range;
+        double unit;
 
-        internal LinearVar(GRBModel model,int index, Site site,int direction,Domain[]range,float width)
+        internal GRBVar road; //唯一变量
+        List<Line> resultLine = new List<Line>();
+        
+        internal List<int> zonesLorB;
+        internal List<int> zonesRorT;
+        /// <summary>
+        /// Directions: 0 is vertical and 1 is horizontal 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="Direction"></param>
+        /// <param name="stroke"></param>
+        /// <param name="range"></param>
+        internal LinearVar(int index,int Direction, float stroke, Domain[] range,double unit)
         {
-            this.model = model;
-            this.site = site;
-            this.direction = direction;
-            this.width = width;
+            this.index = index;
+            this.direction = Direction;
+            this.stroke = stroke;
             this.range = range;
-            if (direction == 0)
+            this.unit = unit;
+        }
+        public void SetVar(GRBModel model,Site site)
+        {
+            if (Direction == 0)
             {
                 road = model.AddVar(site.Xmin, site.Xmax, 0, GRB.CONTINUOUS, "x");
                 if (range[1].min < site.Ymin)
                     range[1].min = site.Ymin;
                 if (range[1].max > site.Ymax)
-                    range[1].max= site.Ymax;
+                    range[1].max = site.Ymax;
 
             }
             else
@@ -47,17 +57,17 @@ namespace InitialArrange
             }
             model.AddRange(road, range[0].min, range[0].max, " ");
         }
+       public List<Line> ResultLine { get => resultLine;}
+        public int Direction { get => direction;}
+        public float Stroke { get => stroke; }
 
-        internal List<Line> ResultLine { get => resultLine; set => resultLine = value; }
-
-
-        internal void LineConstr(List<DistrictVar> districtVars)
+        internal void LineConstr(GRBModel model, List<ZoneVar> zoneVars,Site site)
         {
 
-            int c = districtVars.Count;
+            int c = zoneVars.Count;
             GRBVar[] road_bools = new GRBVar[ 4];
 
-            switch (direction)
+            switch (Direction)
             {
                 case 0:
                     //竖向道路
@@ -67,23 +77,23 @@ namespace InitialArrange
                         {
                             road_bools[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, " ");
                         }
-                        model.AddConstr(districtVars[d].x - districtVars[d].dx / 2 + (1 - road_bools[0]) * site.W
-                            >= road + width, "x-dx/2>=roadX ");//
-                        model.AddConstr(districtVars[d].x + districtVars[d].dx / 2 - (1 - road_bools[1]) * site.W
-                            <= road - width, "x+dx/2<=roadX ");//
+                        model.AddConstr(zoneVars[d].x - zoneVars[d].dx / 2 + (1 - road_bools[0]) * site.W
+                            >= road + stroke/unit, "x-dx/2>=roadX ");//
+                        model.AddConstr(zoneVars[d].x + zoneVars[d].dx / 2 - (1 - road_bools[1]) * site.W
+                            <= road - stroke/unit, "x+dx/2<=roadX ");//
 
-                        model.AddConstr(districtVars[d].y + districtVars[d].dy / 2 - (1 - road_bools[2]) * site.H
+                        model.AddConstr(zoneVars[d].y + zoneVars[d].dy / 2 - (1 - road_bools[2]) * site.H
                             <= range[1].min, "  ");//
-                        model.AddConstr(districtVars[d].y - districtVars[d].dy / 2 + (1 - road_bools[3]) * site.H
+                        model.AddConstr(zoneVars[d].y - zoneVars[d].dy / 2 + (1 - road_bools[3]) * site.H
                             >= range[1].max, "  ");//
                         model.AddConstr(road_bools[ 0] + road_bools[1] + road_bools[2] + road_bools[3] == 1, " ");
 
-                        if (districtsLorB != null && districtsLorB.Contains(districtVars[d].District.Index))
+                        if (zonesLorB != null && zonesLorB.Contains(zoneVars[d].Zone.Index))
                         {
                             model.AddConstr(road_bools[1] == 1, "");
 
                         }
-                        if (districtsRorT != null && districtsRorT.Contains(districtVars[d].District.Index))
+                        if (zonesRorT != null && zonesRorT.Contains(zoneVars[d].Zone.Index))
                         {
                             model.AddConstr(road_bools[0] == 1, "");
 
@@ -98,19 +108,19 @@ namespace InitialArrange
                         {
                             road_bools[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, " ");
                         }
-                        model.AddConstr(districtVars[d].y - districtVars[d].dy / 2 + (1 - road_bools[0]) * site.H >= road + width, "y-dy/2>=roadY ");
-                        model.AddConstr(districtVars[d].y + districtVars[d].dy / 2 - (1 - road_bools[1]) * site.H <= road - width, "y+dy/2<=roadY ");
-                        model.AddConstr(districtVars[d].x + districtVars[d].dx / 2 - (1 - road_bools[2]) * site.W <= range[1].min, "  ");//
-                        model.AddConstr(districtVars[d].x - districtVars[d].dx / 2 + (1 - road_bools[3]) * site.W >= range[1].max, "  ");//
+                        model.AddConstr(zoneVars[d].y - zoneVars[d].dy / 2 + (1 - road_bools[0]) * site.H >= road + stroke/unit, "y-dy/2>=roadY ");
+                        model.AddConstr(zoneVars[d].y + zoneVars[d].dy / 2 - (1 - road_bools[1]) * site.H <= road - stroke/unit, "y+dy/2<=roadY ");
+                        model.AddConstr(zoneVars[d].x + zoneVars[d].dx / 2 - (1 - road_bools[2]) * site.W <= range[1].min, "  ");//
+                        model.AddConstr(zoneVars[d].x - zoneVars[d].dx / 2 + (1 - road_bools[3]) * site.W >= range[1].max, "  ");//
 
                         model.AddConstr(road_bools[0] + road_bools[1] + road_bools[2] + road_bools[3] == 1, " ");
                        
-                        if (districtsLorB!=null&&districtsLorB.Contains(districtVars[d].District.Index))
+                        if (zonesLorB!=null&&zonesLorB.Contains(zoneVars[d].Zone.Index))
                         {
                             
                             model.AddConstr(road_bools[1] == 1, "");
                         }
-                        if (districtsRorT != null && districtsRorT.Contains(districtVars[d].District.Index))
+                        if (zonesRorT != null && zonesRorT.Contains(zoneVars[d].Zone.Index))
                         {
 
                             model.AddConstr(road_bools[0] == 1, "");
@@ -125,7 +135,7 @@ namespace InitialArrange
             float roadLoc;
             roadLoc = (float)road.Xn;
             
-            if (direction == 0)
+            if (Direction == 0)
                resultLine.Add(new Line(roadLoc, (float)range[1].min, roadLoc, (float)range[1].max));
             else
                 resultLine.Add(new Line((float)range[1].min, roadLoc, (float)range[1].max, roadLoc));
@@ -134,7 +144,7 @@ namespace InitialArrange
         internal void WriteResults(StreamWriter sw, int resultCount)
         {
             string dataStr;
-            dataStr = width.ToString();
+            dataStr = (stroke/unit).ToString();
             for (int n = 0; n < resultCount; n++)
             {
                 try

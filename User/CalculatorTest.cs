@@ -73,7 +73,7 @@ namespace User
 
             campus = new Campus((schoolType)type, pop, area, r,fileName1,fileName2,exportPath);
             campus.Run();
-            campus.Export();
+            campus.Export(); //导出至csv
 
             ///(1,13000,62.4,1)
         }

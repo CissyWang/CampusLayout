@@ -1,0 +1,11 @@
+E:\grasshopper_C#\Campus\Solution\Configuration\bin\Debug\Configuration.dll
+E:\grasshopper_C#\Campus\Solution\Configuration\bin\Debug\Configuration.pdb
+E:\grasshopper_C#\Campus\Solution\Configuration\obj\Debug\Configuration.csproj.CoreCompileInputs.cache
+E:\grasshopper_C#\Campus\Solution\Configuration\obj\Debug\Configuration.dll
+E:\grasshopper_C#\Campus\Solution\Configuration\obj\Debug\Configuration.pdb
+E:\grasshopper_C#\Campus\Configuration\bin\Debug\Configuration.dll
+E:\grasshopper_C#\Campus\Configuration\bin\Debug\Configuration.pdb
+E:\grasshopper_C#\Campus\Configuration\obj\Debug\Configuration.csproj.CoreCompileInputs.cache
+E:\grasshopper_C#\Campus\Configuration\obj\Debug\Configuration.dll
+E:\grasshopper_C#\Campus\Configuration\obj\Debug\Configuration.pdb
+E:\grasshopper_C#\Campus\Configuration\obj\Debug\Configuration.csproj.AssemblyReference.cache

@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--test 4.3 布局结构测试。山东师范场地-->
+<!--unit: m-->
+<configuration>
+
+	<basic>
+		<unit>20</unit>
+		<resultCount>5</resultCount>
+		<time>60</time>
+		<!--searchMode:  0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解-->
+		<searchMode>0</searchMode>
+		<!--0=false, 1=true-->
+		<isInteger> 0 </isInteger>
+	</basic>
+	<filepath>
+		<!--zoneFile 是有子分区数量信息的表格，默认为1 之后有用户界面可修改。另外可以改成json输入-->
+		<zoneFile> ../../test/4.3/export1.csv </zoneFile> 
+		<siteFile>../../test/4.3/site.csv</siteFile>
+		<locationFile>../../test/4.3/locationT.csv</locationFile>
+	</filepath>
+	<weights>
+		<areaWeight>0.5</areaWeight>
+		<distWeight>1</distWeight>
+	</weights>
+	<Shape>
+		<!--长宽比-->
+		<LenToWidth>2</LenToWidth>
+		<!--运动场尺寸-->
+		<SportArea>
+			<Width>150</Width>
+			<Length>200</Length>
+		</SportArea>
+		<!--最小边长-->
+		<MinLength>60</MinLength>
+		<MinLength zoneID="9">60</MinLength>
+
+		<!--面积浮动范围-->
+		<AreaFloats min="1" max="2"/>
+		<AreaFloats zoneID="{2}" min="1" max="1.2"/>
+		<!--子分区 分配面积下限-->
+		<AreaSep>0.8</AreaSep>
+		<AreaSep zoneID="3">0.75</AreaSep>
+		<!--间距-->
+		<Spacing>12</Spacing>
+
+		<!--密度-->
+		<!--<Density>0.7</Density>
+		<TotalArea>300000</TotalArea>-->
+	</Shape>
+	<Topology>
+		<RoadLinks>
+			<RoadLink type="near" zoneID="{10,11,13}"  roadNum="2"/>
+			<RoadLink type="near" zoneID="{12,14}" roadNum="3"/>
+		</RoadLinks>
+		<PointLinks>
+			<PointLink zoneID="{0,1,2}" poiNum="0"/>
+			<PointLink zoneID="{7,9}" poiNum="4"/>
+		</PointLinks>
+		<ZoneLinks>
+			<ZoneLink type="near" zoneID="{12,14}" />
+			<ZoneLink type="near" zoneID="{10,13}" />
+		</ZoneLinks>
+	</Topology>
+	
+	<StructureElements>
+		<!--type: Core Axis Group Grid-->
+		<Core stroke="20">
+			<Domain xrange="{24,28}" yrange ="{21,24}" widthDomain ="{6,16}"	lengthDomain="{16,20}"/>
+			<minimizeWeight> -1</minimizeWeight>
+			<insideZone isOnly="true" isAlign="true" zoneID="{4,7,9}"></insideZone>
+			<outsideZone  isAlign="true" zoneID="{3}"></outsideZone>
+		</Core>
+
+		<!--<Axes>
+			<Axis id="0" startPt="{37,27}" endPt ="{53,27}" width="18"> 
+				--><!--点的坐标还未缩放???--><!--
+				<asRealAxis  zoneID="{0,1,2}"/>
+			</Axis>
+		</Axes>-->
+
+		<!--<Groups>
+			<Group id="0" minimizeWeight="0.3" zoneID="{0,1,2,8}"/> 或者“All”
+			<Group id="1" minimizeWeight="0.3" zoneID="{10,11,12,13,14}" lenToWidth="3"/>
+		</Groups>-->
+
+		<!--<Grids>
+			<xGrid id="0"  stroke="10">
+				<Domain yrange= "{8,13}" xrange="{0,39}"/>
+				<ControlZones zoneIDs="{10,11,12,13,14}" side="bottom"/>
+			</xGrid>
+			
+			<yGrid id="0"  stroke="10">
+				<Domain yrange= "{27,35}" xrange="{0,22}"/>
+			</yGrid>
+		</Grids>-->
+		
+	</StructureElements>
+</configuration>

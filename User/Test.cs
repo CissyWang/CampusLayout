@@ -12,12 +12,9 @@ using System.Drawing;
 using IndexCalculate;
 /// <summary>
 /// 问题记录
-/// *1.boundry保留两位小数比保留一位要快（结果不一样，数值差不多）
-/// *2.minus超出范围计算不出来
 /// *3.不同的searchMode计算结果和耗时不一样：1最慢，0中等，2最快（由最优到满足限制）
 /// （0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解）
 /// *4.对面积（总面积）限制合理可以算得更快
-/// *5.排除点采用新方法更快
 /// </summary>
 
 namespace User
@@ -34,24 +31,22 @@ namespace User
          int resultN = 0;//当前解
         bool result = false;
         Font font;
-        int bgColor = 230;
-        
-        Campus campus; 
+
         int resultCount = 8; //解数
-        int grid = 20;             //运行单元大小
+        int unit = 20;             //运行单元大小
         bool info=false;
         #endregion
 
-        string siteCsv = "../test/site1.csv";//场地信息
-        string districtCsv = "../test/districtExportE1.csv";//分区信息
-        string locationCsv = "../test/district_location11.csv";//分区位置
-        double time = 200;
+        string siteCsv = "E:/grasshopper_C#/test/site1.csv";//场地信息
+        string districtCsv = "E:/grasshopper_C#/test/districtExportE1.csv";//分区信息
+        string locationCsv = "E:/grasshopper_C#/test/district_location11.csv";//分区位置
+        double time = 20;
 
         override
         public void SetUp()
         {
               #region***初始化设置***
-            myCal = new Calculator(grid, siteCsv,districtCsv);
+            myCal = new Calculator(unit, siteCsv,districtCsv,locationCsv);
 
             myCal.ResultCount = resultCount;
             myCal.PoolSearchMode =2;// （0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解）
@@ -60,13 +55,13 @@ namespace User
             ///***条件设置***
             myCal.IsInteger = 2;
             myCal.LenToWidth(2);//长宽比（默认为3.0）
-            //myCal.Districts[10].SetArea_lim (20000, 0);//设置某种分区的面积范围
+            //myCal.Zones[10].SetArea_lim (20000, 0);//设置某种分区的面积范围
 
             //myCal.TotalArea(360000);//原定校舍面积算不出来
             //myCal.Density = 0.7;//设置总场地占用限制清楚更快；
             //设置最小长宽
            // myCal.LengthMin(9, 60);
-            myCal.Spacing(0);
+            myCal.SetSpacing(0);
             myCal.AreaFloats(1,1.1);
             #endregion
 
@@ -74,7 +69,7 @@ namespace User
             //myCal.RoadLink(17, "0");
             //myCal.RoadAlign(8, 0, "3", 5);
             //myCal.PointLink(0, 0, "0");
-            //myCal.DistrictLink(4, 18);
+            //myCal.ZoneLink(4, 18);
 
             for (int i = 0; i <10; i++)
             {
@@ -103,8 +98,9 @@ namespace User
             #endregion
 
             #region 轴线式布局
-            //myCal.Axis = new Line[] { new Line(10, 22, 25, 22), new Line(25, 6, 25, 40) };  
-            //myCal.OnAxisDistricts = new int[][] { new int[] { 5 } , new int[] {  0,1 } };
+            //myCal.Axis.Add(new Axis(10, 22, 25, 22));  
+            //myCal.Axis.Add(new Axis(25, 6, 25, 40));
+            //myCal.OnAxisZones = new int[][] { new int[] { 5 } , new int[] {  0,1 } };
             ////myCal.Axis_width(1);
             //myCal.InsideAxis(5,true);
             //myCal.runGRB("Axis", 0, 1);
@@ -127,7 +123,7 @@ namespace User
             myCal.runGRB("", 0, 1);
            // myCal.runGRB("Core", 0, 0);
             //myCal.runGRB("Core,Grid", 0, 1);
-            //myCal.ResponseExportCSV(locationCsv);//导出表格
+            myCal.ResponseExportCSV();//导出表格
 
             #region 显示设置
             //Smooth(8);
@@ -137,7 +133,7 @@ namespace User
             ColorMode(HSB);
             //ColorMode(RGB);
             font = CreateFont("微软雅黑", 24);
-            TextFont(font,0.5f*grid);
+            TextFont(font,0.5f*unit);
             #endregion
         }
 
@@ -174,10 +170,10 @@ namespace User
                 foreach (IRectangle m in myCal.Site.Blocks)
                 {
                     BeginShape();
-                    Vertex(grid * m.X1, grid * m.Y1, 0);
-                    Vertex(grid * m.X2, grid * m.Y1, 0);
-                    Vertex(grid * m.X2, grid * m.Y2, 0);
-                    Vertex(grid * m.X1, grid * m.Y2, 0);
+                    Vertex(unit * m.X1, unit * m.Y1, 0);
+                    Vertex(unit * m.X2, unit * m.Y1, 0);
+                    Vertex(unit * m.X2, unit * m.Y2, 0);
+                    Vertex(unit * m.X1, unit * m.Y2, 0);
                     EndShape();
                 }
             }
@@ -188,10 +184,10 @@ namespace User
                 foreach (IRectangle m in myCal.Site.Minus)
                 {
                     BeginShape();
-                    Vertex(grid * m.X1, grid * m.Y1, 0);
-                    Vertex(grid * m.X2, grid * m.Y1, 0);
-                    Vertex(grid * m.X2, grid * m.Y2, 0);
-                    Vertex(grid * m.X1, grid * m.Y2, 0);
+                    Vertex(unit * m.X1, unit * m.Y1, 0);
+                    Vertex(unit * m.X2, unit * m.Y1, 0);
+                    Vertex(unit * m.X2, unit * m.Y2, 0);
+                    Vertex(unit * m.X1, unit * m.Y2, 0);
                     EndShape();
                 }
             }
@@ -202,13 +198,13 @@ namespace User
                 if (entrs.IndexOf(poi) <3)
                 {
                     PushMatrix();
-                //TextSize(grid);
-                Translate(grid * poi.p, grid * poi.q);
+                //TextSize(unit);
+                Translate(unit * poi.p, unit * poi.q);
                 TextAlign(0, 1);
-                    TextSize(grid);
+                    TextSize(unit);
         
                    Text("P" + entrs.IndexOf(poi).ToString(), 0, -40, 0);
-                Sphere(0.3f * grid);
+                Sphere(0.3f * unit);
                 PopMatrix();
                 }
             }
@@ -220,9 +216,9 @@ namespace User
                 foreach (IPoint poi in myCal.Site.OutOfSite)
                 {
                     PushMatrix();
-                    //TextSize(grid);
-                    Translate(grid * poi.p, grid * poi.q);
-                    Sphere(0.2f * grid);
+                    //TextSize(unit);
+                    Translate(unit * poi.p, unit * poi.q);
+                    Sphere(0.2f * unit);
                     PopMatrix();
                 }
             }
@@ -235,12 +231,12 @@ namespace User
                 {
                     if (r.Width > 0)
                     {
-                        StrokeWeight(grid * r.Width);
+                        StrokeWeight(unit * r.Width);
                         Stroke(200);
-                        Line(grid * r.X1, grid * r.Y1, 0, grid * r.X2, grid * r.Y2, 0);
+                        Line(unit * r.X1, unit * r.Y1, 0, unit * r.X2, unit * r.Y2, 0);
                         StrokeWeight(1); Stroke(0, 255, 255);
-                        Line(grid * r.X1, grid * r.Y1, 0, grid * r.X2, grid * r.Y2, 0);
-                        Text(roads.IndexOf(r).ToString(), (grid * r.X1 + grid * r.X2) / 2, (grid * r.Y1 + grid * r.Y2) / 2, 0);
+                        Line(unit * r.X1, unit * r.Y1, 0, unit * r.X2, unit * r.Y2, 0);
+                        Text(roads.IndexOf(r).ToString(), (unit * r.X1 + unit * r.X2) / 2, (unit * r.Y1 + unit * r.Y2) / 2, 0);
                     }
                 }
             }
@@ -251,9 +247,15 @@ namespace User
             int index1 = 0;//colour
             int index2 = 0;
 
-            foreach (DistrictVar dv in myCal.DistrictVars)
+#pragma warning disable CS1061 // “Calculator”未包含“ZoneVars”的定义，并且找不到可接受第一个“Calculator”类型参数的可访问扩展方法“ZoneVars”(是否缺少 using 指令或程序集引用?)
+#pragma warning disable CS0246 // 未能找到类型或命名空间名“ZoneVar”(是否缺少 using 指令或程序集引用?)
+            foreach (ZoneVar dv in myCal.ZoneVars)
+#pragma warning restore CS0246 // 未能找到类型或命名空间名“ZoneVar”(是否缺少 using 指令或程序集引用?)
+#pragma warning restore CS1061 // “Calculator”未包含“ZoneVars”的定义，并且找不到可接受第一个“Calculator”类型参数的可访问扩展方法“ZoneVars”(是否缺少 using 指令或程序集引用?)
             {
-                index1 = myCal.Districts.IndexOf(dv.District);
+#pragma warning disable CS1061 // “Calculator”未包含“Zones”的定义，并且找不到可接受第一个“Calculator”类型参数的可访问扩展方法“Zones”(是否缺少 using 指令或程序集引用?)
+                index1 = myCal.Zones.IndexOf(dv.Zone);
+#pragma warning restore CS1061 // “Calculator”未包含“Zones”的定义，并且找不到可接受第一个“Calculator”类型参数的可访问扩展方法“Zones”(是否缺少 using 指令或程序集引用?)
                 index2 = dv.Index;
                 Fill((25 +23  * index1)%255,70, 245);
                 //Fill(colorList[index1,0], colorList[index1, 1], colorList[index1, 2]);
@@ -261,10 +263,10 @@ namespace User
                 Stroke(255);
                 var rect = dv.rectResults[resultN];
                 BeginShape();
-                Vertex(grid * rect.X1, grid * rect.Y1, 0);
-                Vertex(grid * rect.X2, grid * rect.Y1, 0);
-                Vertex(grid * rect.X2, grid * rect.Y2, 0);    
-                Vertex(grid * rect.X1, grid * rect.Y2, 0);
+                Vertex(unit * rect.X1, unit * rect.Y1, 0);
+                Vertex(unit * rect.X2, unit * rect.Y1, 0);
+                Vertex(unit * rect.X2, unit * rect.Y2, 0);    
+                Vertex(unit * rect.X1, unit * rect.Y2, 0);
                 EndShape();
 
                 //Fill(150,150,150);
@@ -272,20 +274,20 @@ namespace User
                 string index = index1 + "-" + index2;
                 if (index2 == 0)
                     index = index1.ToString();
-                TextSize(1f * grid);
+                TextSize(1f * unit);
                 TextAlign(1, 1);
-                //Text(index + "." + dv.District.name, grid * rect.Center.p, grid * rect.Center.q, 0);//文字
+                //Text(index + "." + dv.Zone.name, unit * rect.Center.p, unit * rect.Center.q, 0);//文字
                 
                 if (info)
                 {
-                    double buildingArea = dv.Area(resultN,grid) * dv.District.Building_area / dv.District.Result_area(resultN);
-                    double siteArea = Math.Round(dv.Area(resultN,grid), 0);
+                    double buildingArea = dv.Area(resultN,unit) * dv.Zone.Building_area / dv.Zone.Result_area(resultN);
+                    double siteArea = Math.Round(dv.Area(resultN,unit), 0);
                     buildingArea = Math.Round(buildingArea, 0);
-                    TextSize(0.9f * grid);
+                    TextSize(0.9f * unit);
                     double temp = Math.Round(0.05f * 0.05 * siteArea, 1);
-                    Text(temp.ToString(), grid * rect.Center.p, grid * (rect.Center.q ), 0);
-                    //Text("占地：" + temp.ToString(), grid * rect.Center.p, grid * (rect.Center.q - 1), 0);
-                    //Text("建筑：" + buildingArea.ToString(), grid * rect.Center.p, grid * (rect.Center.q - 1.7f), 0);
+                    Text(temp.ToString(), unit * rect.Center.p, unit * (rect.Center.q ), 0);
+                    //Text("占地：" + temp.ToString(), unit * rect.Center.p, unit * (rect.Center.q - 1), 0);
+                    //Text("建筑：" + buildingArea.ToString(), unit * rect.Center.p, unit * (rect.Center.q - 1.7f), 0);
                     
                 }
             }
@@ -293,31 +295,39 @@ namespace User
 
             #region 呈现结构
             //绘制中心区
-            if (myCal.Core != null)
+            if (myCal.CoreVar != null)
             {
                 NoFill();
                 Stroke(150,150,150);
-                StrokeWeight(grid*0.1f);
-                var rect = myCal.Core.rectResults[resultN];
+                StrokeWeight(unit*0.1f);
+                var rect = myCal.CoreVar.rectResults[resultN];
                 BeginShape();
-                Vertex(grid * rect.X1, grid * rect.Y1, 0);
-                Vertex(grid * rect.X2, grid * rect.Y1, 0);
-                Vertex(grid * rect.X2, grid * rect.Y2, 0);
-                Vertex(grid * rect.X1, grid * rect.Y2, 0);
+                Vertex(unit * rect.X1, unit * rect.Y1, 0);
+                Vertex(unit * rect.X2, unit * rect.Y1, 0);
+                Vertex(unit * rect.X2, unit * rect.Y2, 0);
+                Vertex(unit * rect.X1, unit * rect.Y2, 0);
                 EndShape();
             }
 
             // 绘制轴线
-            if (myCal.Axis != null)
+            if (myCal.Axes != null)
             {
-                foreach (Line r in myCal.Axis)
+                foreach (Line r in myCal.Axes)
                 {
                     StrokeWeight(1);
-                    Line(grid * r.X1, grid * r.Y1, 0, grid * r.X2, grid * r.Y2, 0);
+                    Line(unit * r.X1, unit * r.Y1, 0, unit * r.X2, unit * r.Y2, 0);
                 }
             }
 
-            myCal.Grids(resultN, this);
+            if (myCal.GridVars != null)
+            {
+                for (int i = 0; i < myCal.GridVars.Count; i++)
+                {
+                    StrokeWeight(myCal.GridVars[i].Stroke * unit);
+                    var r = myCal.GridVars[i].ResultLine[resultN];
+                    Line(unit * r.X1, unit * r.Y1, 0, unit * r.X2, unit * r.Y2, 0);
+                }
+            }
 
             #endregion
 
@@ -328,7 +338,7 @@ namespace User
             //BeginShape();
             //foreach (IPoint p in boundry)
             //{
-            //    Vertex(grid * p.p, grid * p.q, 0);
+            //    Vertex(unit * p.p, unit * p.q, 0);
             //}
             //EndShape();
             #endregion
@@ -341,7 +351,7 @@ namespace User
             Fill(0);
             TextAlign(0, 0);
             Text(resultN + "用地" + myCal.AreaResult[resultN], 0, 0, 0);
-            //Text("占地" + myCal.Site.Area() * grid * grid, 0, 3 * grid, 0);
+            //Text("占地" + myCal.Site.Area() * unit * unit, 0, 3 * unit, 0);
             # endregion
         }
 

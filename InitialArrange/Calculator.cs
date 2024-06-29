@@ -1,4 +1,9 @@
-﻿using System;
+﻿///和GRB_Calculator（基类）合并了
+///用于运行Gorubi， 包括从文件中读取分区信息并创建变量，从文件中读取场地信息
+///通过XmlParser读取布局要求，运行优化，将结果导出。
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,57 +21,151 @@ namespace InitialArrange
         Inside = 1,
         Outside = 2
     }
-    public class Calculator:GRB_Calculator
+    public class Calculator
     {
+        internal int unit;
+        internal int resultCount = 5;
+        internal int poolSearchMode = 0;
+        //int districtCount;
+        internal int dvCount;//计算分区数量
+        internal double time = 50.0;
 
-        DistrictVar core;//中心区变量
-        Domain[] core_domain;
-        List<int> insideDistricts = new List<int>();
-        bool insideOnly;
-        bool insideAlign;
-        List<int> outsideDistricts=new List<int>();
-        bool outsideAlign=false;
-        double coreK;
-        double core_width;
-        double core_lenToWidth=3;
+        ///设定场地
+        internal Site site; //场地信息
+        internal string fileName;//输出文件
 
-        Line[] axis;//输入轴线
-        int[][] AxisDistricts;//实轴分区
-        int[][] AxisAsideDistricts;//虚轴分区
+        #region 设定各个分区
+        internal int isInteger;//长宽变量是整数
+        internal double spacing;//分区间间距
 
-        double[] axis_width;
-        double[] axis_buffer;
-         bool[]  axis_center;
+        internal List<IZone> zones = new List<IZone>();
+        internal List<ZoneVar> zoneVars = new List<ZoneVar>();//所有分区变量列表
+        List<int[]> zoneLink = new List<int[]>();//两个分区拓扑关系
+        List<int> zoneDist = new List<int>();//分区远离
 
+        internal double[] sportInfo;
+        internal double[] weights;
+        #endregion
 
-        List<DistrictVar> groups;//组团变量
-        int groupCount;
-        List<int[]> groupDistricts = new List<int[]>();
-        List<double> groupK = new List<double>();
-        List<Domain[]> group_domain;
-        double g_lenToWidth=3;
+        double totalArea;//校舍总用地面积
+        bool totalAreaLimit = false;
+        double layoutDensity;//场地占用率
+        protected float[] areaResult;//分区结果总面积
 
-        //网格
-        LinearVar[] gridVars;
-        List<int> gridIndex=new List<int>();
-        List<Domain[]> grid_range = new List<Domain[]>();
-        List<float> grid_width = new List<float>();
-        List<int> directions= new List<int>();
-        int gridLineCount;
-        List<List<int>> districtsLorB = new List<List<int>>();
-        List<List<int>> districtsRorT = new List<List<int>>();
+        string mode="";
+        internal IGroup core;//中心区
+        ZoneVar coreVar;//中心区变量
+        internal List<Axis> axes;//输入轴线，常量
+        internal List<IGroup> groups;//组团
+        List<ZoneVar> groupVars;//组团变量       
+        internal List<LinearVar> gridVars; //网格 变量
 
-        public Calculator(int grid, string siteCsv, Campus campus,string export) : base(grid, siteCsv, campus,export)
+        protected XmlParser parser;
+
+        public Calculator(string xmlFilePath)
         {
+            XmlParser parser = new XmlParser(xmlFilePath);
+            parser.BasicSettings(this);
 
+            //读取分区并新建
+            ReadZones(parser.Filepaths[0]); //
+            SetZoneVar();
+            dvCount = zoneVars.Count; //读取分区数量
+            Console.WriteLine("分区变量：" + dvCount + "项");
+
+            //分区变量的通用控制
+            parser.ShapeSettings(this);
+            parser.TopologySettings(this);
+            parser.StructureSettings(this);
         }
-        public Calculator(int grid, string siteCsv,  string export) : base(grid, siteCsv,  export)
+        ///***构造函数***
+        public Calculator(string xmlFilePath, Campus campus)
         {
+            XmlParser parser = new XmlParser(xmlFilePath);
+            parser.BasicSettings(this);
 
+            foreach (Zone d in campus.Zones)
+            {
+                IZone newD = new IZone(d, unit);
+                zones.Add(newD);
+            }
+
+            //读取分区数量
+            ReadZones(parser.Filepaths[0]);
+            SetZoneVar();
+            dvCount = zoneVars.Count;
+            Console.WriteLine("分区变量：" + dvCount + "项");
+
+            //分区变量的通用控制
+            parser.ShapeSettings(this);
+            parser.TopologySettings(this);
+            parser.StructureSettings(this);
+        }
+
+        ///*****运行Gurobi*****
+        public void runGRB(string mode)
+        {
+            try
+            {
+                GRBEnv env = new GRBEnv(true);
+                env.Set("LogFile", "mip1.log");
+                env.Start();
+
+                GRBModel model = new GRBModel(env);
+                SetBasicVar(model);
+
+                //目标
+                GRBQuadExpr objExpr = new GRBQuadExpr();
+                objExpr.Add(basicObj(model, weights[0], weights[1])); //权重已转移至此
+                if (mode.Contains("Core"))
+                {
+                    Console.WriteLine("中心区模式");
+                    objExpr.Add(CoreObj(model));
+                }
+                if (mode.Contains("Axes"))
+                {
+                    Console.WriteLine("轴线模式");
+                    AxisObj(model);
+                }
+                if (mode.Contains("Groups"))
+                {
+                    Console.WriteLine("组团模式");
+                    objExpr.Add(GroupObj(model));
+                }
+                if (mode.Contains("Grids"))
+                {
+                    Console.WriteLine("网格模式");
+                    GridObj(model);
+                }
+                model.SetObjective(objExpr, GRB.MINIMIZE);
+
+                //优化设置
+                model.Set(GRB.IntParam.NonConvex, 2);
+                model.Set(GRB.IntParam.PoolSearchMode, poolSearchMode);//default:
+                //model.Set(GRB.DoubleParam.PoolGap, 3);
+                model.Set(GRB.IntParam.PoolSolutions, resultCount);
+                model.Set(GRB.DoubleParam.TimeLimit, time);
+
+                //运行
+                model.Optimize();
+
+                //导出
+                setLoc(model);
+                Console.WriteLine("Obj: " + model.ObjVal);
+
+                // 关闭模型
+                model.Dispose();
+                env.Dispose();
+            }
+            catch (GRBException e)
+            {
+                Console.WriteLine("Error code: " + e.ErrorCode + ". " + e.Message);
+            }
         }
         ///分区信息输出Location表格
-        public void ResponseExportCSV(string fileName)
+        public void ResponseExportCSV()
         {
+
             if (fileName.Length <= 0)
             {
                 return;
@@ -75,13 +174,13 @@ namespace InitialArrange
             StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
             string dataHead;
             ///写入分区数据
-            dataHead = "Districts ";
+            dataHead = "Zones ";
             for (int n = 0; n < resultCount; n++)
             {
                 dataHead += "," + n.ToString();
             }
             sw.WriteLine(dataHead);
-            foreach (DistrictVar dv in districtVars)
+            foreach (ZoneVar dv in zoneVars)
             {
                 dv.WriteResults(sw, resultCount);
             }
@@ -90,11 +189,11 @@ namespace InitialArrange
             sw.WriteLine("Rectangle");
             if (core != null)
             {
-                core.WriteStructureResults(sw, resultCount);
+                coreVar.WriteStructureResults(sw, resultCount);
             }
             if (groups != null)
             {
-                foreach (DistrictVar g in groups)
+                foreach (ZoneVar g in GroupVars)
                 {
                     g.WriteStructureResults(sw, resultCount);
                 }
@@ -104,7 +203,7 @@ namespace InitialArrange
             sw.WriteLine("Roads");
             if (gridVars != null)
             {
-                foreach(LinearVar lv in gridVars)
+                foreach (LinearVar lv in gridVars)
                 {
                     lv.WriteResults(sw, resultCount);
                 }
@@ -112,18 +211,19 @@ namespace InitialArrange
             ///写入轴线
             sw.WriteLine("Axis");
             string dataStr;
-            if (axis != null)
+            if (axes != null)
             {
-                for(int i=0;i<axis.Length;i++)
+                for (int i = 0; i < axes.Count; i++)
                 {
-                    try { 
-                        dataStr = axis_width[i].ToString();
+                    try
+                    {
+                        dataStr = axes[i].width.ToString();
                     }
                     catch
                     {
-                        dataStr = axis_buffer[i].ToString();
+                        dataStr = axes[i].buffer.ToString();
                     }
-                    dataStr += $",({axis[i].X1}; {axis[i].Y1} ; {axis[i].X2} ; {axis[i].Y2})";
+                    dataStr += $",({axes[i].X1}; {axes[i].Y1} ; {axes[i].X2} ; {axes[i].Y2})";
                     sw.WriteLine(dataStr);
                 }
             }
@@ -133,177 +233,228 @@ namespace InitialArrange
 
         }
 
-        override
-        protected GRBQuadExpr CoreObj(GRBModel model)
+        ///****读取分区信息***
+        // 连接上一步的
+        private void ReadZones(string path)  
         {
-            GRBQuadExpr expr = new GRBQuadExpr();
-
-            //中心区范围
-            if (core_domain != null)
-                core = new DistrictVar(site, core_domain, isInteger, core_lenToWidth);
-            else
-                core = new DistrictVar(site, isInteger, core_lenToWidth);
-            core.SetVar(model);
-            core.SiteConstr(model);
-            for(int a = 0; a < districts.Count; a++) {
-                foreach(DistrictVar dv in districts[a].districtVars)
-                {
-                    var b = outsideDistricts != null && outsideDistricts.Contains(a);
-                    
-                    //必须在内
-                    if (insideDistricts != null && insideDistricts.Contains(a))
-                    {
-                        dv.inOrOutOthers(model, core, core_width, InOrOut.Inside, insideAlign);
-                    }
-                    //必须在外
-                    else if (insideOnly&&!b)
-                    {
-                        dv.inOrOutOthers(model, core, core_width, InOrOut.Outside, false);
-                    }else if(b)
-                        dv.inOrOutOthers(model, core, core_width, InOrOut.Outside,outsideAlign); 
-                    else
-                    {
-                        dv.inOrOutOthers(model, core, core_width, InOrOut.None, false);
-
-                    }
-                }
-            }
-
-            //目标
-            expr.Add((core.dx * core.dy) * (100 * coreK / site.Area()));
-            return expr;
-        }
-
-        override
-         protected void AxisObj(GRBModel model)
-        {
-            if (axis == null)
-                return;
-            for (int i = 0; i < axis.Length; i++)
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+            string str = "";
+            bool start = false;
+            int index = 0;
+            while ((str = sr.ReadLine()) != null)
             {
-                if (AxisAsideDistricts[i] != null)
+                if (str.Contains("校舍用地面积"))
                 {
-                    
-                    foreach (int jj in AxisAsideDistricts[i])
-                    {
-                        foreach (DistrictVar dv in districts[jj].districtVars)
-                        {
-                            dv.LineAlign(model, axis[i], axis_width[i]);
-                        }
-                    }
-                }
-                if (AxisDistricts[i] != null)
-                {
-
-                    foreach (int j in AxisDistricts[i])
-                    {
-                        foreach (DistrictVar dv in districts[j].districtVars)
-                        {
-                            dv.LineAlign(model, axis[i], axis_buffer[i],axis_center[i]);
-                        }
-                    }
-                }
-            }
-        }
-
-        override
-        protected GRBLinExpr GroupObj(GRBModel model)
-        {
-            GRBLinExpr expr = new GRBLinExpr();
-            groups = new List<DistrictVar>();
-
-            for(int i = 0; i < groupCount; i++)
-            {
-                DistrictVar g;
-                //创建组团变量
-                if (group_domain != null)
-                    g= new DistrictVar(site, core_domain, isInteger, g_lenToWidth);
-                else
-                    g = new DistrictVar(site, isInteger, g_lenToWidth);
-
-                g.SetVar(model);
-                g.SiteConstr(model);
-                groups.Add(g);
-
-                if(groupDistricts[i].Length <= 0)
-                {
-                    Console.WriteLine($"组团{i}无效");
+                    string result = System.Text.RegularExpressions.Regex.Replace(str, @"[^0-9]+", "");
+                    totalArea += int.Parse(result);
                     continue;
                 }
 
-                //限制在组团内
-                for (int j = 0; j < districts.Count; j++)
+                if (str.Contains("分区名"))
                 {
-                    if (groupDistricts[i].Contains(j))
-                    {
-                        foreach (DistrictVar dv in districts[j].districtVars)
-                        {
-                            dv.inOrOutOthers(model, groups[i], 0, InOrOut.Inside, false);
-                        }
-                    }
-                    //必须在外
-                    else
-                    {
-                        foreach (DistrictVar dv in districts[j].districtVars)
-                        {
-                            dv.inOrOutOthers(model, groups[i], 0, InOrOut.Outside, outsideAlign);
-                        }
-                    }
+                    start = true;
+                    continue;
                 }
+                if (start)
+                {
+                    string[] strs = str.Split(',');
+                    double d_siteArea = Convert.ToDouble(strs[2]);
+                    int d_count = 1;
+                    if (strs.Length > 6 && strs[6] != null)
+                    {
+                        d_count = int.Parse(strs[6]);
+                    }
 
-            //组团最小化
-            expr.Add((groups[i].dx + groups[i].dy) * (100 * groupK[i] / (site.W+site.H)));
+                    if (zones.Count > index)
+                    {
+                        zones[index].Site_area = d_siteArea;//
+                        zones[index].Count = d_count;
+                    }
+                    else//不连接上一步时
+                    {
+                        var zone = new IZone(index, strs[0], d_siteArea, Convert.ToDouble(strs[3]), d_count, unit);
+                        dvCount += d_count;//总的分区变量数量
+                        zones.Add(zone);
+                    }
+                    index++;
+                }
             }
 
-            //组团互相不重叠
-            for(int i = 0; i < groupCount - 1; i++)
-            {
-                groups[i].ConstrOverlap(model, groups, 0.5);
-            }
-            return expr;
         }
 
-        override
-        protected void GridObj(GRBModel model)
+        private void SetZoneVar()
         {
-            gridVars = new LinearVar[gridLineCount];
-            for(int i=0;i< gridLineCount; i++)
+            foreach (IZone d in zones)
             {
-                gridVars[i]= new LinearVar(model, gridIndex[i],site,directions[i],grid_range[i],grid_width[i]);
-
-                try {
-                    gridVars[i].districtsLorB = districtsLorB[i];
-                    
-                } catch { }
-
-                try
+                Console.WriteLine("\r\n");
+                Console.WriteLine(d.name + d.Count);
+                d.ZoneVars = new ZoneVar[d.Count];
+                for (int i = 0; i < d.Count; i++)
                 {
-                    gridVars[i].districtsRorT = districtsRorT[i];
+                    d.zoneVars[i] = new ZoneVar(d, site, isInteger);
+                    zoneVars.Add(d.zoneVars[i]);
                 }
-                catch { }
-                gridVars[i].LineConstr(districtVars);
             }
         }
 
-        override
+        #region 基础变量、限制、目标
+        protected void SetBasicVar(GRBModel model)
+        {
+            //变量初始设置
+            foreach (ZoneVar dv in zoneVars)
+            {
+                dv.SetVar(model);
+                dv.SiteConstr(model);
+                //model.AddConstr(dv.dx >= lengthMin, "");
+                //model.AddConstr(dv.dy >= lengthMin, "");
+            }
+
+            foreach (IZone d in zones)
+            {
+                //体育区尺寸控制
+                if (d.Building_area == 0)
+                {
+                    model.AddConstr(d.zoneVars[0].dx >= sportInfo[0] / unit, " ");
+                    model.AddConstr(d.zoneVars[0].dy >= sportInfo[1] / unit, " ");
+                }
+            }
+
+            AreaConstr(model);
+
+            for (int i = 0; i < dvCount - 1; i++)
+            {
+                zoneVars[i].ConstrOverlap(model, zoneVars, spacing);
+            }
+        }
+
+        private void AreaConstr(GRBModel model)
+        {
+            GRBQuadExpr expr = new GRBQuadExpr();
+            GRBQuadExpr expr1 = new GRBQuadExpr();
+
+            ///分区面积限制
+            foreach (IZone d in zones)
+            {
+                //表格读取的面积要求 
+                foreach (ZoneVar dv in d.zoneVars)
+                {
+                    expr.Add(dv.dx * dv.dy);//求功能区的总面积
+                }
+                //设置单个范围or设置总浮动
+                if (d.area_lim == null)
+                {
+                    model.AddQConstr(expr >= d.S, "dx*dy>area");
+                }
+                else
+                {
+                    model.AddQConstr(expr <= d.area_lim.max, "area<area_max");
+                    model.AddQConstr(expr >= d.area_lim.min, "area>area_min");
+                }
+
+                //清空
+                expr.Clear();
+            }
+
+            ///总体面积限制
+            foreach (ZoneVar dv in zoneVars)
+            {
+                expr1.AddTerm(1, dv.dx, dv.dy);
+                if (dv.Zone.building_area > 0)
+                    expr.AddTerm(1, dv.dx, dv.dy);
+            }
+            if (totalAreaLimit)
+                model.AddQConstr(expr >= totalArea / unit / unit, " "); //校舍总用地面积达到要求
+
+            if (layoutDensity > 0)
+                model.AddQConstr(expr1 >= layoutDensity * site.Area(), " S_totall> r%*site.area");
+        }
+
+        protected GRBQuadExpr basicObj(GRBModel model, double areaK, double distK)
+        {
+            var basicObj = new GRBQuadExpr();
+            //*面积
+            if (areaK > 0)
+            {
+                GRBQuadExpr expr = new GRBQuadExpr();
+                foreach (ZoneVar dv in zoneVars)
+                {
+                    ///面积占用率（0—100）
+                    if (dv.Zone.building_area > 0)
+                        expr.AddTerm(1, dv.dx, dv.dy);
+                }
+                double k = areaK * 100;
+                double total = site.Area();
+                Console.WriteLine("可利用面积=" + total);
+                basicObj.Add((k / total) * (total - expr));
+                expr.Clear();
+            }
+            //*距离
+            if (distK == 0)
+            { return basicObj; }
+
+            //到场地点线距离
+            foreach (ZoneVar dv in zoneVars)
+            {
+                ///距离指标（0—100）
+                if (dv.SingleP_link != null && dv.SingleP_link.Count > 0)
+                    dv.SetEntranceObj(basicObj, distK * 100 / dv.SingleP_link.Count);
+                if (dv.Road_link != null && dv.Road_link.Count > 0)
+                    dv.SetRoadObj(basicObj, 1);
+                if (dv.Road_align != null && dv.Road_align.Count > 0)
+                    dv.SetRoadConstr(model);
+            }
+            //分区拓扑
+            if (zoneLink != null)
+            {
+                foreach (int[] ds in zoneLink)
+                {
+                    var district1 = zones[ds[0]];
+                    var district2 = zones[ds[1]];
+                    int c = district2.Count;
+                    if (district1.Count < district2.Count)
+                        c = district1.Count;
+                    for (int i = 0; i < c; i++)
+                    {
+                        district1[i].ZoneLinkObj(basicObj, district2[i]);
+                    }
+
+                }
+            }
+            if (zoneDist != null)
+            {
+                foreach (int i in zoneDist)
+                {
+                    IZone d = zones[i];
+                    int c = d.Count;
+                    for (int j = 0; j < c - 1; j++)
+                    {
+
+                        d.zoneVars[j].ZoneDistObj(basicObj, d.zoneVars[j + 1]);
+                    }
+                }
+            }
+            return basicObj;
+        }
+
         protected void setLoc(GRBModel model)
         {
             for (int n = 0; n < resultCount; n++)
             {
                 model.Set(GRB.IntParam.SolutionNumber, n);
                 Console.WriteLine("Result:" + n);
-                foreach (DistrictVar dv in districtVars)
+                foreach (ZoneVar dv in zoneVars)
                 {
                     dv.SetResult(model, n);
-                   
+
                 }
                 if (core != null)
                 {
-                    core.SetResult(model, n);
+                    coreVar.SetResult(model, n);
                 }
-                if (groups!= null)
+                if (groups != null)
                 {
-                    foreach (DistrictVar dv in groups)
+                    foreach (ZoneVar dv in GroupVars)
                     {
                         dv.SetResult(model, n);
                     }
@@ -322,184 +473,179 @@ namespace InitialArrange
             areaResult = new float[resultCount];
             for (int n = 0; n < resultCount; n++)
             {
-                foreach (DistrictVar dv in districtVars)
+                foreach (ZoneVar dv in zoneVars)
                 {
-                    areaResult[n] += dv.rectResults[n].Area * grid * grid;
+                    areaResult[n] += dv.rectResults[n].Area * unit * unit;
                 }
             }
         }
+        #endregion
 
-        public void Core_domain(int[] x,int[] y,int[]dx,int[]dy) {
-            core_domain = new Domain[4];
-            core_domain[0] = new Domain(x[0], x[1]);
-            core_domain[1] = new Domain(y[0], y[1]);
-            core_domain[2] = new Domain(dx[0], dx[1]);
-            core_domain[3] = new Domain(dy[0], dy[1]);
-        }
-        public void Core_domain(int[] x, int[] y)
+        # region set structure 
+
+        protected GRBQuadExpr CoreObj(GRBModel model)
         {
-            core_domain = new Domain[2];
-            core_domain[0] = new Domain(x[0], x[1]);
-            core_domain[1] = new Domain(y[0], y[1]);
-        }
-
-        public void Core_Outside(string districtIndex, bool align)
-        {
-            for (int i = 0; i < districts.Count; i++)
-            {
-                if (districtIndex.Contains("all"))
+            GRBQuadExpr expr = new GRBQuadExpr();
+            //中心区范围
+            if (core.domain != null)
+                coreVar = new ZoneVar(site, core.domain, isInteger, core.lenToWidth); //在这里新建变量
+            else
+                coreVar = new ZoneVar(site, isInteger, core.lenToWidth);
+            coreVar.SetVar(model);
+            coreVar.SiteConstr(model);
+            for(int a = 0; a < zones.Count; a++) {
+                foreach(ZoneVar dv in zones[a].zoneVars)
                 {
-                    outsideDistricts.Add(i);
-                }
-                else
-                {
-                    try
+                    var b = core.outsideZones != null && core.outsideZones.Contains(a);
+                    //必须在内
+                    if (core.insideZones != null && core.insideZones.Contains(a))
                     {
-                        var indexes = districtIndex.Split(',');
-                        if (indexes.Contains(i.ToString()))
-                            outsideDistricts.Add(i);
+                         dv.inOrOutOthers(model, coreVar, core.stroke/unit, InOrOut.Inside, core.insideAlign);
                     }
-                    catch
+                    //必须在外
+                    else if (core.insideOnly&&!b)
                     {
-                        Console.WriteLine("CoreOutside选取失败");
-                    }
-
-                }
-            }
-            outsideAlign = align;
-        }
-
-        public void Core_Inside(string districtIndex,bool only,bool align)
-        {
-            for (int i = 0; i <districts.Count; i++)
-            {
-                if (districtIndex.Contains("all"))
-                {
-                    insideDistricts.Add(i);
-                }
-                else 
-                {
-                    try
+                        dv.inOrOutOthers(model, coreVar, core.stroke/unit, InOrOut.Outside, false);
+                    }else if(b)
+                        dv.inOrOutOthers(model, coreVar, core.stroke / unit, InOrOut.Outside,core.outsideAlign); 
+                    else
                     {
-                        var indexes = districtIndex.Split(',');
-                        if (indexes.Contains(i.ToString()))
-                            insideDistricts.Add(i);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("CoreInside选取失败");
+                        dv.inOrOutOthers(model, coreVar, core.stroke / unit, InOrOut.None, false);
                     }
                 }
             }
-            insideOnly = only;
-            insideAlign = align;
-        }
-        public void CoreK(double k)
-        {
-            coreK = k;
-        }
-        public DistrictVar Core { get => core; set => core = value; }
-        public void Core_width (double width)
-        {
-            core_width = width;
-        }
-        public Line[] Axis { get => axis;}
-        public void AddAxis(Line[] axis)
-        {
-            this.axis = axis;
-            int count = axis.Length;
-            AxisAsideDistricts = new int[count][];
-            AxisDistricts = new int[count][];
-            axis_buffer = new double[count];
-            axis_center = new bool[count];
-            axis_width = new double[count];
 
-        }
-        public void RealAxis(int axisNum,int[] districtNum,double width)//紧邻的分区
-        {
-            AxisAsideDistricts[axisNum]= districtNum;
-            axis_width[axisNum]=width;
-        }
-        public void VirtualAxis(int axisNum, int[] distrctNum,double buffer,bool center)//在内的分区
-        {
-            AxisDistricts[axisNum]= distrctNum;
-            axis_buffer[axisNum]= buffer;
-            axis_center[axisNum]= center;
+            //目标
+            expr.Add((coreVar.dx * coreVar.dy) * (100 * core.minimizeWeight / site.Area()));
+            return expr;
         }
 
-
-        //增加组团
-        public void SetGroup(int index,int[] insideDistricts,double minK)
+     
+         protected void AxisObj(GRBModel model)
         {
-            groupCount ++;
-            groupDistricts.Add(insideDistricts);
-            groupK.Add(minK);
-        }
-        public void SetGroup(int index, int[] insideDistricts, double minK,double lenToWidth)
-        {
-            groupCount++;
-            groupDistricts.Add(insideDistricts);
-            groupK.Add(minK);
-            g_lenToWidth = lenToWidth;
-        }
-        public List<DistrictVar> Groups { get => groups; }
-
-        //增加网格
-        public void AddGrid(Domain[] range,float gridWidth,int direction)
-        {
-            gridIndex.Add(gridLineCount);
-            grid_range.Add(range);
-            grid_width.Add(gridWidth);
-            directions.Add(direction);
-            gridLineCount++;
-        }
-
-        public void AddGrid(Domain[] range, float gridWidth, int direction,int[] districts,int side)
-        {
-            grid_range.Add(range);
-            grid_width.Add(gridWidth);
-            directions.Add(direction);
-            gridIndex.Add(gridLineCount);
-
-            List<int> op = new List<int>();
-            List<int> ad = new List<int>();
-            for (int i = 0; i < this.districts.Count; i++)
+            if (axes == null)
+                return;
+            for (int i = 0; i < axes.Count; i++)
             {
-                if (!districts.Contains(i))
+                if (axes[i].asideZones != null)
                 {
-                    op.Add(i);
+                    foreach (int jj in axes[i].asideZones)
+                    {
+                        foreach (ZoneVar dv in zones[jj].zoneVars)
+                        {
+                            dv.LineAlign(model, axes[i], axes[i].width/unit);
+                        }
+                    }
                 }
-                else { ad.Add(i); }
-            }
-            if (side == 0)
-            {
-                districtsLorB.Add(ad);
-                districtsRorT.Add(op);
-            }
-            else if (side == 1)
-            {
-                districtsLorB.Add(op);
-                districtsRorT.Add(ad);
-            }
-            gridLineCount++;
-        }
-
-        // 呈现网格
-        public void Grids(int result,IApp app)
-        {
-            if (gridLineCount > 0 )
-            {
-                
-                for (int i = 0; i < gridLineCount; i++)
+                if (axes[i].onZones != null)
                 {
-                    app.StrokeWeight(gridVars[i].width*grid);
-                    var r= gridVars[i].ResultLine[result];
-                    app.Line(grid * r.X1, grid * r.Y1, 0, grid * r.X2, grid * r.Y2, 0);
+
+                    foreach (int j in axes[i].onZones)
+                    {
+                        foreach (ZoneVar dv in zones[j].zoneVars)
+                        {
+                            dv.LineAlign(model, axes[i], axes[i].buffer/unit,axes[i].isCenter);
+                        }
+                    }
                 }
             }
-
         }
 
 
+        protected GRBLinExpr GroupObj(GRBModel model)
+        {
+
+            GRBLinExpr expr = new GRBLinExpr();
+            groupVars = new List<ZoneVar>();
+            foreach (IGroup IG in groups)
+            {
+                if (IG.insideZones.Count <= 0)
+                {
+                    Console.WriteLine($"组团{IG.Index}无效"); //不包含内容的组团
+                    continue;
+                }
+
+                ZoneVar g;
+                g = new ZoneVar(site, isInteger, IG.lenToWidth);
+                g.SetVar(model);
+                g.SiteConstr(model);
+                IG.zoneVar=g;
+                GroupVars.Add(g);
+
+                //限制在组团内
+                for (int j = 0; j < zones.Count; j++)
+                {
+                    if (IG.insideZones.Contains(j))
+                    {
+                        foreach (ZoneVar dv in zones[j].zoneVars)
+                        {
+                            dv.inOrOutOthers(model, g, IG.stroke, InOrOut.Inside, false);
+                        }
+                    }
+                    //必须在外
+                    else
+                    {
+                        foreach (ZoneVar dv in zones[j].zoneVars)
+                        {
+                            dv.inOrOutOthers(model, g, IG.stroke, InOrOut.Outside, false);
+                        }
+                    }
+                }
+
+                //组团最小化
+                expr.Add((g.dx + g.dy) * (100 * IG.minimizeWeight / (site.W + site.H)));
+            }
+
+            //组团互相不重叠
+            for (int i = 0; i < groups.Count - 1; i++)
+            {
+                groups[i].zoneVar.ConstrOverlap(model, GroupVars, 0.5);
+            }
+            return expr;
+        }
+
+
+        protected void GridObj(GRBModel model)
+        {
+            for(int i=0;i< gridVars.Count; i++)
+            {
+                gridVars[i].SetVar(model,site);
+                gridVars[i].LineConstr(model,zoneVars,site);
+            }
+        }
+        #endregion
+
+        #region 封装
+        public ZoneVar CoreVar { get => coreVar; set => coreVar = value; }
+        public List<Axis> Axes { get => axes;}
+        public List<IGroup> Groups { get => groups; }
+
+        public string Mode { get => mode; set => mode = value; }
+        public List<ZoneVar> GroupVars { get => groupVars; set => groupVars = value; }
+        public IGroup Core { get => core; set => core = value; }
+        public List<LinearVar> GridVars { get => gridVars; }
+  
+        public string SiteCsv { set => SiteCsv = value; }
+
+        public int IsInteger { set => isInteger = value; }
+        public List<IZone> Zones { get => zones; }
+        public Site Site { get => site; }
+
+        public float[] AreaResult { get => areaResult; }
+        public int ResultCount { set => resultCount = value; get => resultCount; }
+        public int PoolSearchMode { set => poolSearchMode = value; }
+
+        public List<ZoneVar> ZoneVars { get => zoneVars; set => zoneVars = value; }
+        public double Time { get => time; set => time = value; }
+        public int Unit { get => unit; }
+        public double TotalArea { get => totalArea; set => totalArea = value; }
+        public bool TotalAreaLimit { get => totalAreaLimit; set => totalAreaLimit = value; }
+        public double LayoutDensity { get => layoutDensity; set => layoutDensity = value; }
+        public double Spacing { get => spacing; set => spacing = value; }
+        public double[] SportInfo { get => sportInfo; set => sportInfo = value; }
+        public List<int[]> ZoneLink { get => zoneLink; set => zoneLink = value; }
+        public List<int> ZoneDist { get => zoneDist; set => zoneDist = value; }
+
+        #endregion
     }
 }

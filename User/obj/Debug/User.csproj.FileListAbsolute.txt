@@ -66,3 +66,11 @@ F:\grasshopper_C#\Campus\User\obj\Debug\User.csproj.CopyComplete
 F:\grasshopper_C#\Campus\User\obj\Debug\User.exe
 F:\grasshopper_C#\Campus\User\obj\Debug\User.pdb
 F:\grasshopper_C#\Campus\User\obj\Debug\User.csproj.AssemblyReference.cache
+E:\grasshopper_C#\Campus\Solution\User.exe.config
+E:\grasshopper_C#\Campus\Solution\User.exe
+E:\grasshopper_C#\Campus\Solution\User.pdb
+E:\grasshopper_C#\Campus\User\obj\Debug\User.csproj.AssemblyReference.cache
+E:\grasshopper_C#\Campus\User\obj\Debug\User.csproj.CoreCompileInputs.cache
+E:\grasshopper_C#\Campus\User\obj\Debug\User.csproj.CopyComplete
+E:\grasshopper_C#\Campus\User\obj\Debug\User.exe
+E:\grasshopper_C#\Campus\User\obj\Debug\User.pdb
