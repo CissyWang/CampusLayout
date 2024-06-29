@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace InitialArrange
 {
-    public class IRectangle
+    public struct IRectangle
     {
 
         private float x1;
@@ -13,7 +13,7 @@ namespace InitialArrange
         private float x2;
         private float y2;
         private IPoint center;
-        private float area;
+        //private float area;
         float dx;
         float dy;
         
@@ -46,7 +46,7 @@ namespace InitialArrange
 
         
         public IPoint Center { get => center;  }
-        public float Area { get => dx*dy; set => area = value; }
+        public float Area { get => dx*dy; }
         public float Dx { get => dx; set => dx = value; }
         public float Dy { get => dy; set => dy = value; }
     }

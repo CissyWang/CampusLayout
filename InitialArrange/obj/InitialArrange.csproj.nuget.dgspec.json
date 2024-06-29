@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {}
+    "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {}
   },
   "projects": {
-    "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj": {
+    "E:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj",
+        "projectUniqueName": "E:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj",
         "projectName": "IndexCalculate",
-        "projectPath": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj",
-        "packagesPath": "C:\\Users\\name\\.nuget\\packages\\",
-        "outputPath": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\obj\\",
+        "projectPath": "E:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "E:\\grasshopper_C#\\Campus\\AreaCalculator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\name\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -43,17 +43,32 @@
         }
       }
     },
-    "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {
+    "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj": {
+      "restore": {
+        "projectUniqueName": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj",
+        "projectName": "Configuration",
+        "projectPath": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj",
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    },
+    "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+        "projectUniqueName": "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
         "projectName": "InitialArrange",
-        "projectPath": "F:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
-        "packagesPath": "C:\\Users\\name\\.nuget\\packages\\",
-        "outputPath": "F:\\grasshopper_C#\\Campus\\InitialArrange\\obj\\",
+        "projectPath": "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "E:\\grasshopper_C#\\Campus\\InitialArrange\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\name\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -67,8 +82,11 @@
           "net48": {
             "targetAlias": "net48",
             "projectReferences": {
-              "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj": {
-                "projectPath": "F:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj"
+              "E:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj": {
+                "projectPath": "E:\\grasshopper_C#\\Campus\\AreaCalculator\\IndexCalculate.csproj"
+              },
+              "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj": {
+                "projectPath": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj"
               }
             }
           }

@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--unit: m-->
+<!--test 4.2 拓扑关系测试。山东师范场地-->
+<configuration>
+
+	<basic>
+		<unit>20</unit>
+		<resultCount>5</resultCount>
+		<time>60</time>
+		<!--searchMode:  0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解-->
+		<searchMode>0</searchMode>
+		<!--0=false, 1=true-->
+		<isInteger> 0 </isInteger>
+	</basic>
+	<filepath>
+		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
+		<zoneFile> ../../test/4.2/export1.csv </zoneFile>
+		<siteFile>../../test/4.2/site with entrance.csv</siteFile>
+		<locationFile>../../test/4.2/location4-0T.csv</locationFile>
+	</filepath>
+	<weights>
+		<areaWeight>0.5</areaWeight>
+		<distWeight>1</distWeight>
+	</weights>
+	<Shape>
+		<!--长宽比-->
+		<LenToWidth>2</LenToWidth>
+		<!--运动场尺寸-->
+		<SportArea>
+			<Width>150</Width>
+			<Length>200</Length>
+		</SportArea>
+		<!--最小边长-->
+		<MinLength>60</MinLength>
+		<MinLength zoneID="9">60</MinLength>
+
+		<!--面积浮动范围-->
+		<AreaFloats min="1" max="2"/>
+		<AreaFloats zoneID="{2}" min="1" max="1.2"/>
+		<!--子分区 分配面积下限-->
+		<AreaSep>0.8</AreaSep>
+		<AreaSep zoneID="3">0.75</AreaSep>
+		<!--间距-->
+		<Spacing>12</Spacing>
+
+		<!--密度-->
+		<!--<Density>0.7</Density>
+		<TotalArea>300000</TotalArea>-->
+	</Shape>
+	<Topology>
+		<RoadLinks>
+			<RoadLink type="near" zoneID="{10,11,13}"  roadNum="2"/>
+			<RoadLink type="near" zoneID="{12,14}" roadNum="3"/>
+		</RoadLinks>
+		<PointLinks>
+			<PointLink zoneID="{0,1,2}" poiNum="0"/>
+			<PointLink zoneID="{7,9}" poiNum="4"/>
+		</PointLinks>
+		<DistrictLinks>
+			<DistrictLink type="near" zoneID="{12,14}" />
+			<DistrictLink type="near" zoneID="{10,13}" />
+		</DistrictLinks>
+	</Topology>
+	
+	<StructureElements>
+		<!--type: Core Axis Group Grid-->
+	</StructureElements>
+</configuration>

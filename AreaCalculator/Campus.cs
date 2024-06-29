@@ -45,8 +45,8 @@ namespace IndexCalculate
         double sport_area_per;//额定
         private BuildingList mustBuildings;//必配建筑
         private BuildingList optionalBuildings;//选配建筑
-        private List<string> districtNames = new List<string>();
-        private List<District> districts = new List<District>();//
+        private List<string> zoneNames = new List<string>();
+        private List<Zone> zones = new List<Zone>();//
 
         string fileName1;
         string fileName2;
@@ -68,7 +68,7 @@ namespace IndexCalculate
         {
             scType = type_number;
 
-            #region 1. 用地和人数
+            #region 1. 用地和人数检测
             this.site_area = site_area * 10000; //单位：公顷
             this.population = population;
             this.SetSitePerList();
@@ -95,7 +95,7 @@ namespace IndexCalculate
             sport_area_per = PickNum(site_perList[2], classify);
             #endregion
 
-            #region  2. 建设量和容积率
+            #region  2. 建设量和容积率检测
             //额定建设量
             this.SetAreaPer();//按照不同规模设置生均建筑面积
             this.area_total = area_per * this.population;
@@ -125,7 +125,7 @@ namespace IndexCalculate
                 Console.WriteLine(s);
             }
             #endregion
-
+              
             //设置文件路径
             this.exportPath = exportFile;
             this.fileName1 = mustFile;
@@ -208,14 +208,14 @@ namespace IndexCalculate
             Console.WriteLine("\r\n" + ">>>  按任意键开始计算分区");
             Console.ReadLine();
             //设置分区
-            SetDistrict(mustBuildings);
-            SetDistrict(optionalBuildings);
-            districts.Add(new District(districts.Count,"户外体育区", sport_area));
+            SetZone(mustBuildings);
+            SetZone(optionalBuildings);
+            zones.Add(new Zone(zones.Count,"户外体育区", sport_area));
             strs[3] = new List<string>();
-            this.ExportDistrict(strs[3]);
-            //foreach (District d in districts)
+            this.ExportZone(strs[3]);
+            //foreach (Zone d in zones)
             //{
-            //    //strs[3].Add("\r\n" + "(" + (districts.IndexOf(d) + 1) + ")" + d.Name);
+            //    //strs[3].Add("\r\n" + "(" + (zones.IndexOf(d) + 1) + ")" + d.Name);
             //    //d.Site_area(strs[3]);
             //}
             foreach (string s in strs[3])
@@ -262,32 +262,32 @@ namespace IndexCalculate
             }
             sw1.Close();
         }
-        private void SetDistrict(BuildingList buildings)
+        private void SetZone(BuildingList buildings)
         {
-            int index = districts.Count;
+            int index = zones.Count;
             foreach (Building b in buildings)
             {
-                if (!districtNames.Contains(b.District_name))
+                if (!zoneNames.Contains(b.Zone_name))
                 {
-                    districtNames.Add(b.District_name);
-                    var d = new District(index,b.District_name);
+                    zoneNames.Add(b.Zone_name);
+                    var d = new Zone(index,b.Zone_name);
                     d.Buildings.AddBuilding(b);
-                    districts.Add(d);
+                    zones.Add(d);
                     index++;
                 }
                 else
                 {
-                    int i = districtNames.IndexOf(b.District_name);
-                    districts[i].Buildings.AddBuilding(b);
+                    int i = zoneNames.IndexOf(b.Zone_name);
+                    zones[i].Buildings.AddBuilding(b);
                 }
             }
         }
-        private void ExportDistrict(List<String>strs)
+        private void ExportZone(List<String>strs)
         {
             strs.Add("分区名, 建筑类型, 用地面积最小值, 建筑总面积, 分区容积率, 建设密度");
-            foreach (District d in districts)
+            foreach (Zone d in zones)
             {
-                var str = $"{districts.IndexOf(d)}";
+                var str = $"{zones.IndexOf(d)}";
                 str += d.Name + ",";
                 var aa = d.Site_area();
                 if (d.Buildings != null)
@@ -487,7 +487,7 @@ namespace IndexCalculate
             app.TextFont(new System.Drawing.Font("宋体",6));
             app.PushMatrix();
             app.Rotate(-45);
-            foreach (District d in districts)
+            foreach (Zone d in zones)
             {
                 width = 60;
                 height = (float)d.Site_area() / width;
@@ -634,7 +634,7 @@ namespace IndexCalculate
         public double Site_area { get => site_area; }
         public BuildingList MustBuildings { get => mustBuildings; }
         public BuildingList OptiomalBuildings { get => optionalBuildings; set => optionalBuildings = value; }
-        public List<District> Districts { get => districts; set => districts = value; }
+        public List<Zone> Zones { get => zones; set => zones = value; }
         public double Building_siteArea {set => building_siteArea = value; }
         public double Sport_area {set => sport_area = value; }
         public double Building_site_per { get => building_site_per; set => building_site_per = value; }

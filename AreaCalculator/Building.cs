@@ -7,23 +7,22 @@ namespace IndexCalculate
     public class Building
     {
         string name;
-        string district_name;
+        string zone_name;
         int layer;
         //double area_per;
         double density;
         double area;
-        double site_area;
-        double floor_area;
+        
         int index;
 
-        internal Building(int index,string name, int layer, double area, double density,string district)
+        internal Building(int index,string name, int layer, double area, double density,string zone)
         {
             this.index = index;
             this.name = name;
             this.layer = layer;
             this.area = area;
             this.density = density;
-            this.district_name = district;
+            this.zone_name = zone;
         }
 
         public string Name { get => name;}
@@ -31,8 +30,9 @@ namespace IndexCalculate
         //public double Area_per { get => area_per;}
         public double Density { get => density; }
         public double Area { get => area; set => area = value; }
-        public double Site_area { get => this.site_area = area / layer / density; }
-        public string District_name { get => district_name; set => district_name = value; }
-        public double Floor_area { get => this.floor_area = area / layer; }
+        public double Site_area { get => area / layer / density; }
+        public string Zone_name { get => zone_name; set => zone_name = value; }
+        public double Floor_area { get =>  area / layer; }
+        public int Index { get => index; set => index = value; }
     }
 }

@@ -27,6 +27,10 @@
     <WarningLevel>5</WarningLevel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="GRB_Calculator.cs" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
@@ -41,13 +45,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AreaCalculator\IndexCalculate.csproj" />
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
   </ItemGroup>
 
 
 
   <ItemGroup>
     <Reference Include="Flowing">
-      <HintPath>..\Solution\Flowing.dll</HintPath>
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
     <Reference Include="Gurobi95.NET">
       <HintPath>..\Solution\Gurobi95.NET.dll</HintPath>

@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace InitialArrange
 { 
-    public class IPoint
+    public struct IPoint
     {
         public float p;
         public float q;
-        string name;
+        //public string name;
 
-        public string Name { get => name; set => name = value; }
+        //public string Name { get => name; set => name = value; }
 
         public IPoint(float p, float q)
         {
