@@ -102,28 +102,28 @@ namespace InitialArrange
             parser.StructureSettings(this);
         }
         ///***构造函数***
-        public Calculator(string xmlFilePath, Campus campus)
-        {
-            XmlParser parser = new XmlParser(xmlFilePath);
-            parser.BasicSettings(this);
+        //public Calculator(string xmlFilePath, Campus campus)
+        //{
+        //    XmlParser parser = new XmlParser(xmlFilePath);
+        //    parser.BasicSettings(this);
 
-            foreach (Zone d in campus.Zones)
-            {
-                IZone newD = new IZone(d, unit);
-                zones.Add(newD);
-            }
+        //    foreach (Zone d in campus.Zones)
+        //    {
+        //        IZone newD = new IZone(d, unit);
+        //        zones.Add(newD);
+        //    }
 
-            //读取分区数量
-            ReadZones(parser.Filepaths[0]);
-            SetZoneVar();
-            dvCount = zoneVars.Count;
-            Console.WriteLine("分区变量：" + dvCount + "项");
+        //    //读取分区数量
+        //    ReadZones(parser.Filepaths[0]);
+        //    SetZoneVar();
+        //    dvCount = zoneVars.Count;
+        //    Console.WriteLine("分区变量：" + dvCount + "项");
 
-            //分区变量的通用控制
-            parser.ShapeSettings(this);
-            parser.TopologySettings(this);
-            parser.StructureSettings(this);
-        }
+        //    //分区变量的通用控制
+        //    parser.ShapeSettings(this);
+        //    parser.TopologySettings(this);
+        //    parser.StructureSettings(this);
+        //}
 
         ///*****运行Gurobi*****
         public void runGRB(string mode)
