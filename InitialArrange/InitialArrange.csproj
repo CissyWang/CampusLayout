@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!-- existing property declarations are here -->
+		<UseCommonOutputDirectory>true</UseCommonOutputDirectory>
+	</PropertyGroup>
+	
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <StartupObject></StartupObject>
+
+    <ApplicationIcon />
+
+    <OutputType>Library</OutputType>
+
+    <AssemblyName>InitialArrange</AssemblyName>
+
+    <RootNamespace>InitialArrange</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>..\Solution</OutputPath>
+    <WarningLevel>5</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GRB_Calculator.cs" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="coverlet.collector" Version="3.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Reference Include="CampusClass">
+      <HintPath>..\..\CampusClass\CampusClass\bin\Release\CampusClass.dll</HintPath>
+    </Reference>
+    <Reference Include="Flowing">
+      <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+    </Reference>
+    <Reference Include="Gurobi95.NET">
+      <HintPath>..\Solution\Gurobi95.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Reference Update="System">
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

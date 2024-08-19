@@ -1,0 +1,82 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {}
+  },
+  "projects": {
+    "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj": {
+      "restore": {
+        "projectUniqueName": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj",
+        "projectName": "Configuration",
+        "projectPath": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj",
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    },
+    "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+        "projectName": "InitialArrange",
+        "projectPath": "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "E:\\grasshopper_C#\\Campus\\InitialArrange\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "targetAlias": "net48",
+            "projectReferences": {
+              "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj": {
+                "projectPath": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "targetAlias": "net48",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.3.2, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.2.0, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.412\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
