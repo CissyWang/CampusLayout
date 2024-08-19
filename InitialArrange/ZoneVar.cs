@@ -1,11 +1,9 @@
-﻿using Gurobi;
+﻿using CampusClass;
+using Gurobi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IndexCalculate;
 using System.IO;
+using System.Linq;
 
 namespace InitialArrange
 {
@@ -17,11 +15,11 @@ namespace InitialArrange
         internal GRBVar y;
         internal GRBVar dx;
         internal GRBVar dy;
-        
+
         IZone zone;
         Site site;
         int isInteger;
-        internal double lenToWidth=3;
+        internal double lenToWidth = 3;
         int index;
         Domain[] domain;
 
@@ -34,7 +32,7 @@ namespace InitialArrange
         private Domain area_lim;
 
         public IZone Zone { get => zone; }
-  
+
 
         #region Constructor
         public ZoneVar(IZone zone, Site site, int isInteger)
@@ -44,7 +42,7 @@ namespace InitialArrange
             this.isInteger = isInteger;
             Area_lim = new Domain(0, site.W * site.H);
         }
-        
+
         //用于Group\Core
         public ZoneVar(Site site, int isInteger, double lenToWidth)
         {
@@ -53,9 +51,9 @@ namespace InitialArrange
             this.lenToWidth = lenToWidth;
             Area_lim = new Domain(0, site.W * site.H);
         }
-        
-        public ZoneVar( Site site,Domain[] domain, int isInteger, double lenToWidth)
-         {
+
+        public ZoneVar(Site site, Domain[] domain, int isInteger, double lenToWidth)
+        {
             this.site = site;
             this.isInteger = isInteger;
             this.lenToWidth = lenToWidth;
@@ -63,7 +61,7 @@ namespace InitialArrange
             Area_lim = new Domain(0, site.W * site.H);
 
         }
-        public void SetVar(GRBModel model)
+        public void SetVar(GRBModel model, double spacing)
         {
             x = model.AddVar(site.Xmin, site.Xmax, site.Xmin, GRB.CONTINUOUS, "x");
             y = model.AddVar(site.Ymin, site.Ymax, site.Ymin, GRB.CONTINUOUS, "y");
@@ -78,13 +76,13 @@ namespace InitialArrange
                 dy = model.AddVar(1, site.H, 0, GRB.CONTINUOUS, "dy");
             }
 
-            model.AddConstr(x + dx / 2 <= site.Xmax, "x+dx/2<=xmax");
-            model.AddConstr(y + dy / 2 <= site.Ymax, "y+dy/2<=ymax");
-            model.AddConstr(x - dx / 2 >= site.Xmin, "x-dx/2>xmin");
-            model.AddConstr(y - dy / 2 >= site.Ymin, "y-dy/2>=ymin");
-            
+            model.AddConstr(x + dx / 2 + spacing / 2 <= site.Xmax, "x+dx/2<=xmax");
+            model.AddConstr(y + dy / 2 + spacing / 2 <= site.Ymax, "y+dy/2<=ymax");
+            model.AddConstr(x - dx / 2 - spacing / 2 >= site.Xmin, "x-dx/2>xmin");
+            model.AddConstr(y - dy / 2 - spacing / 2 >= site.Ymin, "y-dy/2>=ymin");
+
             //最小长宽
-            if (zone!=null&&zone.Length_min > 0)
+            if (zone != null && zone.Length_min > 0)
             {
                 model.AddConstr(dx >= zone.Length_min, "");
                 model.AddConstr(dy >= zone.Length_min, "");
@@ -115,7 +113,7 @@ namespace InitialArrange
             }
         }
 
-        public void SiteConstr(GRBModel model)
+        public void SiteConstr(GRBModel model, double spacing)
         {
             //Minus Rectangle
             if (site.Minus != null)
@@ -125,13 +123,13 @@ namespace InitialArrange
                 {
                     for (int i = 0; i < 4; i++)
                     {
-                        bool_minus[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "bool_minus" + i );
+                        bool_minus[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "bool_minus" + i);
                     }
-                    model.AddConstr(x + dx / 2 <= rect.X1 + (1 - bool_minus[ 0]) * site.W, "x+dx/2<=X1");//
-                    model.AddConstr(y + dy / 2 <= rect.Y1 + (1 - bool_minus[ 1]) * site.H, "y+dy/2<=Y1");//
-                    model.AddConstr(x - dx / 2 >= rect.X2 - (1 - bool_minus[2]) * site.W, "x-dx/2>=X2");//
-                    model.AddConstr(y - dy / 2 >= rect.Y2 - (1 - bool_minus[3]) * site.H, "y-dy/2>=Y2");//
-                    model.AddConstr(bool_minus[0] + bool_minus[ 1] + bool_minus[ 2] + bool_minus[3] >= 1, "1+2+3+4 >=1");
+                    model.AddConstr(x + dx / 2 + spacing / 2 <= rect.X1 + (1 - bool_minus[0]) * site.W, "x+dx/2<=X1");//
+                    model.AddConstr(y + dy / 2 + spacing / 2 <= rect.Y1 + (1 - bool_minus[1]) * site.H, "y+dy/2<=Y1");//
+                    model.AddConstr(x - dx / 2 - spacing / 2 >= rect.X2 - (1 - bool_minus[2]) * site.W, "x-dx/2>=X2");//
+                    model.AddConstr(y - dy / 2 - spacing / 2 >= rect.Y2 - (1 - bool_minus[3]) * site.H, "y-dy/2>=Y2");//
+                    model.AddConstr(bool_minus[0] + bool_minus[1] + bool_minus[2] + bool_minus[3] >= 1, "1+2+3+4 >=1");
 
                 }
             }
@@ -146,11 +144,11 @@ namespace InitialArrange
                     {
                         bool_points[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "bool_points" + i + index);
                     }
-                    model.AddConstr(x - dx / 2 -0.5+(1-bool_points[0])*site.W>= poi.p, " ");
-                    model.AddConstr(x +dx / 2 +0.5-(1 - bool_points[1]) * site.W <= poi.p, " ");
-                    model.AddConstr(y - dy / 2 - 0.5+ (1 - bool_points[2]) * site.H >= poi.q, " ");
-                    model.AddConstr(y + dy / 2 + 0.5- (1 - bool_points[ 3]) * site.H <= poi.q, " ");
-                    model.AddConstr(bool_points[ 0] + bool_points[ 1] + bool_points[2] + bool_points[3] >= 1, "1+2+3+4 >=1");
+                    model.AddConstr(x - dx / 2 - spacing / 2 - 0.5 + (1 - bool_points[0]) * site.W >= poi.p, " ");
+                    model.AddConstr(x + dx / 2 + spacing / 2 + 0.5 - (1 - bool_points[1]) * site.W <= poi.p, " ");
+                    model.AddConstr(y - dy / 2 - spacing / 2 - 0.5 + (1 - bool_points[2]) * site.H >= poi.q, " ");
+                    model.AddConstr(y + dy / 2 + 0.5 + spacing / 2 - (1 - bool_points[3]) * site.H <= poi.q, " ");
+                    model.AddConstr(bool_points[0] + bool_points[1] + bool_points[2] + bool_points[3] >= 1, "1+2+3+4 >=1");
                 }
             }
 
@@ -158,45 +156,45 @@ namespace InitialArrange
             if (site.Roads != null)
             {
                 foreach (Road r in site.Roads)
-                {    
-                    if (Math.Abs(r.UpDown) == 1)
-                        OutsideRoadConstr(model, r);
+                {
+                    if (Math.Abs(r.UpDown) == 1) // 1/-1
+                        OutsideRoadConstr(model, r, spacing);
                     if (r.UpDown == 2)
-                        InsectRoadConstr(model, r);
+                        InsectRoadConstr(model, r, spacing);
                 }
             }
         }
-       
-        private void OutsideRoadConstr(GRBModel model,Road r )
+
+        private void OutsideRoadConstr(GRBModel model, Road r, double spacing)
         {
             GRBVar[] bool_Road;
             double big = site.W * site.H;
             double k = Math.Sqrt(r.A * r.A + r.B * r.B);
-            double temp = k * r.Width / 2;   //考虑道路距离 
+            double temp = k * r.Width / 2 + spacing / 2;   //考虑道路距离 
             bool_Road = new GRBVar[5];
-                for (int i = 0; i < 5; i++)
-                {
-                    bool_Road[i] = model.AddVar(0, 1, 0, GRB.BINARY, " bool Road" + i);
-                }
-                //-1保留上方，1保留下方
-                model.AddConstr(r.UpDown * (r.A * (x - dx / 2) + r.B * (y - dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
-                model.AddConstr(r.UpDown * (r.A * (x + dx / 2) + r.B * (y + dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
-                model.AddConstr(r.UpDown * (r.A * (x - dx / 2) + r.B * (y + dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
-                model.AddConstr(r.UpDown * (r.A * (x + dx / 2) + r.B * (y - dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
-                model.AddConstr(x - dx / 2 + (1 - bool_Road[1]) * big >= r.Xrange.max, " ");
-                model.AddConstr(x + dx / 2 - (1 - bool_Road[2]) * big <= r.Xrange.min, " ");
-                model.AddConstr(y + dy / 2 - (1 - bool_Road[3]) * big <= r.Yrange.min, " ");
-                model.AddConstr(y - dy / 2 + (1 - bool_Road[4]) * big >= r.Yrange.max, " ");
-                model.AddConstr(bool_Road[0] + bool_Road[1] + bool_Road[2] + bool_Road[3] + bool_Road[4] >= 1, " ");
-                //model.AddConstr(bool_Road[0] == 1, " ");
+            for (int i = 0; i < 5; i++)
+            {
+                bool_Road[i] = model.AddVar(0, 1, 0, GRB.BINARY, " bool Road" + i);
+            }
+            //-1保留上方，1保留下方
+            model.AddConstr(r.UpDown * (r.A * (x - dx / 2) + r.B * (y - dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
+            model.AddConstr(r.UpDown * (r.A * (x + dx / 2) + r.B * (y + dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
+            model.AddConstr(r.UpDown * (r.A * (x - dx / 2) + r.B * (y + dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
+            model.AddConstr(r.UpDown * (r.A * (x + dx / 2) + r.B * (y - dy / 2) + r.C) + (1 - bool_Road[0]) * big >= temp, " ");
+            model.AddConstr(x - dx / 2 + (1 - bool_Road[1]) * big >= r.Xrange.max, " ");
+            model.AddConstr(x + dx / 2 - (1 - bool_Road[2]) * big <= r.Xrange.min, " ");
+            model.AddConstr(y + dy / 2 - (1 - bool_Road[3]) * big <= r.Yrange.min, " ");
+            model.AddConstr(y - dy / 2 + (1 - bool_Road[4]) * big >= r.Yrange.max, " ");
+            model.AddConstr(bool_Road[0] + bool_Road[1] + bool_Road[2] + bool_Road[3] + bool_Road[4] >= 1, " ");
+            //model.AddConstr(bool_Road[0] == 1, " ");
 
         }
-        private void InsectRoadConstr(GRBModel model, Road r)
+        private void InsectRoadConstr(GRBModel model, Road r, double spacing)
         {
             double k = Math.Sqrt(r.A * r.A + r.B * r.B);
-            double temp = k * r.Width / 2;   //考虑道路距离 
+            double temp = k * r.Width / 2 + spacing / 2;   //考虑道路距离 
             double big = site.W * site.H;
-            GRBVar[] bool_Road= new GRBVar[2];
+            GRBVar[] bool_Road = new GRBVar[2];
             for (int i = 0; i < 2; i++)
             {
                 bool_Road[i] = model.AddVar(0, 1, 0, GRB.BINARY, " bool Road" + i);
@@ -240,14 +238,14 @@ namespace InitialArrange
             {
                 for (int n = 0; n < 4; n++)
                 {
-                    bools[n] =  model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "BOOL" + i + j);
+                    bools[n] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "BOOL" + i + j);
                 }
 
                 model.AddConstr(districtVars[i].x + districtVars[i].dx / 2 + spacing <=
-                    districtVars[j].x - districtVars[j].dx / 2 + (1 - bools[ 0]) * site.W,
+                    districtVars[j].x - districtVars[j].dx / 2 + (1 - bools[0]) * site.W,
                     "x+ dx/2 < x1-dx1/2" + i + j);//
                 model.AddConstr(districtVars[i].y + districtVars[i].dy / 2 + spacing <=
-                    districtVars[j].y - districtVars[j].dy / 2 + (1 - bools[ 1]) * site.H,
+                    districtVars[j].y - districtVars[j].dy / 2 + (1 - bools[1]) * site.H,
                     "y+ dy/2 < y1-dy1/2" + i + j);//
                 model.AddConstr(districtVars[j].x + districtVars[j].dx / 2 + spacing <=
                     districtVars[i].x - districtVars[i].dx / 2 + (1 - bools[2]) * site.W,
@@ -255,7 +253,7 @@ namespace InitialArrange
                 model.AddConstr(districtVars[j].y + districtVars[j].dy / 2 + spacing <=
                     districtVars[i].y - districtVars[i].dy / 2 + (1 - bools[3]) * site.H,
                     "y1 + dy1/2 < y-dy/2" + i + j);//
-                model.AddConstr(bools[0] + bools[1] + bools[2] + bools[ 3] >= 1, "bool" + i + j);
+                model.AddConstr(bools[0] + bools[1] + bools[2] + bools[3] >= 1, "bool" + i + j);
 
 
             }
@@ -289,7 +287,7 @@ namespace InitialArrange
                 double c = site.Roads[i].C;
                 double t = 1 / (a * a + b * b);
                 double t1 = 100 / site.lineDistMax(site.Roads[i]);
-                expr.Add(t * (a * x + b * y + c) * (a * x + b * y + c)*t1); ;
+                expr.Add(t * (a * x + b * y + c) * (a * x + b * y + c) * t1); ;
             }
         }
 
@@ -299,7 +297,7 @@ namespace InitialArrange
             GRBVar[] bool_align = new GRBVar[4];
             foreach (int i in Road_align)
             {
-                
+
                 for (int j = 0; j < 4; j++)
                 {
                     bool_align[j] = model.AddVar(0, 1, 0, GRB.BINARY, " ");
@@ -308,18 +306,18 @@ namespace InitialArrange
                 double a = site.Roads[i].A;
                 double b = site.Roads[i].B;
                 double c = site.Roads[i].C;
-                double t = Math.Sqrt(a * a + b * b)*(align_tolerance+width/2);
-                model.AddConstr((a * (x + dx / 2) + b * (y + dy / 2) + c) + (1 - bool_align[0]) * site.w >= - t, "");
-                model.AddConstr((a * (x + dx / 2) + b * (y + dy / 2) + c) - (1 - bool_align[0]) * site.w <=  t, "");
+                double t = Math.Sqrt(a * a + b * b) * (align_tolerance + width / 2);
+                model.AddConstr((a * (x + dx / 2) + b * (y + dy / 2) + c) + (1 - bool_align[0]) * site.w >= -t, "");
+                model.AddConstr((a * (x + dx / 2) + b * (y + dy / 2) + c) - (1 - bool_align[0]) * site.w <= t, "");
 
-                model.AddConstr((a * (x - dx / 2) + b * (y + dy / 2) + c) + (1 - bool_align[1]) * site.w >= - t, "");
-                model.AddConstr((a * (x - dx / 2) + b * (y + dy / 2) + c) - (1 - bool_align[1]) * site.w <=  t, "");
+                model.AddConstr((a * (x - dx / 2) + b * (y + dy / 2) + c) + (1 - bool_align[1]) * site.w >= -t, "");
+                model.AddConstr((a * (x - dx / 2) + b * (y + dy / 2) + c) - (1 - bool_align[1]) * site.w <= t, "");
 
-                model.AddConstr((a * (x + dx / 2) + b * (y - dy / 2) + c) + (1 - bool_align[2]) * site.w >= - t, "");
-                model.AddConstr((a * (x + dx / 2) + b * (y - dy / 2) + c) - (1 - bool_align[2]) * site.w <=  t, "");
+                model.AddConstr((a * (x + dx / 2) + b * (y - dy / 2) + c) + (1 - bool_align[2]) * site.w >= -t, "");
+                model.AddConstr((a * (x + dx / 2) + b * (y - dy / 2) + c) - (1 - bool_align[2]) * site.w <= t, "");
 
                 model.AddConstr((a * (x - dx / 2) + b * (y - dy / 2) + c) + (1 - bool_align[3]) * site.w >= -t, "");
-                model.AddConstr((a * (x - dx / 2) + b * (y - dy / 2) + c) - (1 - bool_align[3]) * site.w <=  t, "");
+                model.AddConstr((a * (x - dx / 2) + b * (y - dy / 2) + c) - (1 - bool_align[3]) * site.w <= t, "");
 
                 model.AddConstr(bool_align[0] + bool_align[1] + bool_align[2] + bool_align[3] >= 1, " ");
 
@@ -357,14 +355,14 @@ namespace InitialArrange
             model.AddConstr(bool_align[0] + bool_align[1] >= 1, " ");
 
             model.AddConstr(x - dx / 2 - (1 - bool_align[2]) <= line.Xrange.max, "");
-            model.AddConstr(x + dx / 2+ (1 - bool_align[2]) >= line.Xrange.min, "");
+            model.AddConstr(x + dx / 2 + (1 - bool_align[2]) >= line.Xrange.min, "");
             model.AddConstr(y - dy / 2 - (1 - bool_align[3]) <= line.Yrange.max, "");
             model.AddConstr(y + dy / 2 + (1 - bool_align[3]) >= line.Yrange.min, "");
             model.AddConstr(bool_align[2] + bool_align[3] >= 1, " ");
         }
 
         //实轴，在之间
-        internal void LineAlign(GRBModel model, Line line, double buffer,bool centered)
+        internal void LineAlign(GRBModel model, Line line, double buffer, bool centered)
         {
             GRBVar[] bool_align = new GRBVar[2];
             for (int j = 0; j < 2; j++)
@@ -396,14 +394,14 @@ namespace InitialArrange
             model.AddConstr(bool_align[0] + bool_align[1] >= 1, " ");
 
             if (centered)
-                    model.AddConstr(a * x + b * y + c == 0, "");
-            
+                model.AddConstr(a * x + b * y + c == 0, "");
+
         }
 
         //分区之间靠近
-        internal void ZoneLinkObj(GRBQuadExpr obj,ZoneVar dv)
+        internal void ZoneLinkObj(GRBQuadExpr obj, ZoneVar dv)
         {
-            
+
             double t = 100 / (site.w * site.w + site.h * site.h);
 
             obj.Add(((x + dx / 2 - dv.x - dv.dx / 2) * (x + dx / 2 - dv.x - dv.dx / 2) +
@@ -414,15 +412,15 @@ namespace InitialArrange
         {
             double t = 100 / (site.w * site.w + site.h * site.h);
 
-            obj.Add(100-((x + dx / 2 - dv.x - dv.dx / 2) * (x + dx / 2 - dv.x - dv.dx / 2) +
+            obj.Add(100 - ((x + dx / 2 - dv.x - dv.dx / 2) * (x + dx / 2 - dv.x - dv.dx / 2) +
                 (y + dy / 2 - dv.y - dv.dy / 2) * (y + dy / 2 - dv.y - dv.dy / 2)) * t);
 
         }
         #endregion
 
-        internal void SetResult(GRBModel model,int result)
+        internal void SetResult(GRBModel model, int result)
         {
-            float xr = (float)Math.Round(x.Xn,2);
+            float xr = (float)Math.Round(x.Xn, 2);
             float yr = (float)Math.Round(y.Xn, 2);
             float dxr = (float)Math.Round(dx.Xn, 2);
             float dyr = (float)Math.Round(dy.Xn, 2);
@@ -436,7 +434,7 @@ namespace InitialArrange
             rectResults.Add(rect);
         }
 
-        internal void inOrOutOthers(GRBModel model,ZoneVar other,double stroke,InOrOut inside,bool align)
+        internal void inOrOutOthers(GRBModel model, ZoneVar other, double stroke, InOrOut inside, bool align)
         {
             GRBVar[] inOut = new GRBVar[5];
             GRBVar[] isAlign;
@@ -444,20 +442,21 @@ namespace InitialArrange
             {
                 inOut[j] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, "bool_out" + j);
             }
-            model.AddConstr( x +  dx / 2 - (1 - inOut[0]) * site.w <= other.x - other.dx / 2 -  stroke / 2, "");
-            model.AddConstr( x -  dx / 2 + (1 - inOut[1]) * site.w >= other.x + other.dx / 2 +  stroke / 2, "");
-            model.AddConstr( y +  dy / 2 - (1 - inOut[2]) * site.h <= other.y - other.dy / 2 -  stroke / 2, "");
-            model.AddConstr( y -  dy / 2 + (1 - inOut[3]) * site.h >= other.y + other.dy / 2 +  stroke / 2, "");
+            model.AddConstr(x + dx / 2 - (1 - inOut[0]) * site.w <= other.x - other.dx / 2 - stroke / 2, "");
+            model.AddConstr(x - dx / 2 + (1 - inOut[1]) * site.w >= other.x + other.dx / 2 + stroke / 2, "");
+            model.AddConstr(y + dy / 2 - (1 - inOut[2]) * site.h <= other.y - other.dy / 2 - stroke / 2, "");
+            model.AddConstr(y - dy / 2 + (1 - inOut[3]) * site.h >= other.y + other.dy / 2 + stroke / 2, "");
 
-            model.AddConstr( x +  dx / 2 - (1 - inOut[4]) * site.w <= other.x + other.dx / 2 -  stroke / 2, "");
-            model.AddConstr( x -  dx / 2 + (1 - inOut[4]) * site.w >= other.x - other.dx / 2 +  stroke / 2, "");
-            model.AddConstr( y +  dy / 2 - (1 - inOut[4]) * site.h <= other.y + other.dy / 2 -  stroke / 2, "");
-            model.AddConstr( y -  dy / 2 + (1 - inOut[4]) * site.h >= other.y - other.dy / 2 +  stroke / 2, "");
+            model.AddConstr(x + dx / 2 - (1 - inOut[4]) * site.w <= other.x + other.dx / 2 - stroke / 2, "");
+            model.AddConstr(x - dx / 2 + (1 - inOut[4]) * site.w >= other.x - other.dx / 2 + stroke / 2, "");
+            model.AddConstr(y + dy / 2 - (1 - inOut[4]) * site.h <= other.y + other.dy / 2 - stroke / 2, "");
+            model.AddConstr(y - dy / 2 + (1 - inOut[4]) * site.h >= other.y - other.dy / 2 + stroke / 2, "");
 
             model.AddConstr(inOut[0] + inOut[1] + inOut[2] + inOut[3] + inOut[4] >= 1, "1+2+3+4>=1");
 
             //必须在内
-            if (inside == InOrOut.Inside) { 
+            if (inside == InOrOut.Inside)
+            {
                 model.AddConstr(inOut[4] == 1, "");
                 if (align)
                 {
@@ -475,7 +474,7 @@ namespace InitialArrange
                 }
             }
             //必须在外
-            else if (inside== InOrOut.Outside)
+            else if (inside == InOrOut.Outside)
             {
                 model.AddConstr(inOut[4] == 0, "");
                 if (align)
@@ -483,7 +482,7 @@ namespace InitialArrange
                     model.AddConstr(x + dx / 2 >= other.x - other.dx / 2 - stroke / 2, "");
                     model.AddConstr(x - dx / 2 <= other.x + other.dx / 2 + stroke / 2, "");
                     model.AddConstr(y + dy / 2 >= other.y - other.dy / 2 - stroke / 2, "");
-                    model.AddConstr(y - dy / 2 <= other.y + other.dy / 2 +stroke / 2, "");
+                    model.AddConstr(y - dy / 2 <= other.y + other.dy / 2 + stroke / 2, "");
                 }
             }
         }
@@ -521,14 +520,14 @@ namespace InitialArrange
         internal List<int> Road_link { get => road_link; set => road_link = value; }
         internal Domain Area_lim { get => area_lim; set => area_lim = value; }
 
-        public double Area(int resultN,float unit)
+        public double Area(int resultN, float unit)
         {
-            return unit*unit*area[resultN];
+            return unit * unit * area[resultN];
         }
 
         public double BuildingArea(int resultN)
         {
-            double buildingArea=0;
+            double buildingArea = 0;
             if (zone != null)
             {
                 buildingArea = area[resultN] * zone.unit * zone.unit * Zone.Building_area / Zone.Result_area(resultN);
@@ -538,30 +537,30 @@ namespace InitialArrange
 
         public double Ratio(int resultN)
         {
-           return area[resultN] * zone.unit * zone.unit / Zone.Result_area(resultN);
+            return area[resultN] * zone.unit * zone.unit / Zone.Result_area(resultN);
         }
 
         public double floor_Area(int resultN)
         {
-            return Ratio(resultN) * zone.Buildings.FloorArea_all();
-        }  
+            return Ratio(resultN) * zone.Buildings.FloorArea;
+        }
 
         public List<double[]> BuildingInfo(int resultN)
         {
             List<double[]> info = new List<double[]>();
-            foreach(Building b in zone.Buildings)
+            foreach (Building b in zone.Buildings)
             {
-                var i =new double[] { Math.Round(b.Floor_area * Ratio(resultN), 2), b.Layer };
+                var i = new double[] { Math.Round(b.Floor_area * Ratio(resultN), 2), b.Layer };
                 info.Add(i);
             }
             return info;
         }
 
-        internal void WriteResults(StreamWriter sw,int resultCount)
+        internal void WriteResults(StreamWriter sw, int resultCount)
         {
             string dataStr;
 
-                dataStr = Zone.name;
+            dataStr = Zone.name;//名称
 
             for (int n = 0; n < resultCount; n++)
             {
@@ -570,7 +569,7 @@ namespace InitialArrange
                     dataStr += $",({rectResults[n].X1};{rectResults[n].Y1};" +
                         $"{ rectResults[n].X2 };{rectResults[n].Y2});" +
                         $"{Math.Round(Area(n, zone.unit), 2)};{Math.Round(BuildingArea(n), 2)}";
-                    if (BuildingArea(n) > 0&&zone.Buildings!=null)
+                    if (BuildingArea(n) > 0 && zone.Buildings != null)
                     {
                         foreach (double[] info in BuildingInfo(n))
                         {

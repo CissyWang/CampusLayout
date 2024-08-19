@@ -44,9 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config4.1.xml" />
     <Content Include="configPointTest.xml" />
     <Content Include="configCoreTest.xml" />
-    <Content Include="config4.1.xml" />
+    <Content Include="configXA.xml" />
     <Content Include="config4.3.xml" />
     <Content Include="config4.2.xml" />
     <Content Include="config1.xml" />

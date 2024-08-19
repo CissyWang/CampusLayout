@@ -69,7 +69,6 @@ F:\grasshopper_C#\Campus\InitialArrange\obj\Debug\net48\InitialArrange.csproj.Co
 F:\grasshopper_C#\Campus\InitialArrange\obj\Debug\net48\InitialArrange.csproj.CopyComplete
 F:\grasshopper_C#\Campus\InitialArrange\obj\Debug\net48\InitialArrange.dll
 F:\grasshopper_C#\Campus\InitialArrange\obj\Debug\net48\InitialArrange.pdb
-E:\grasshopper_C#\Campus\Solution\net48\CoverletSourceRootsMapping
 E:\grasshopper_C#\Campus\InitialArrange\obj\Debug\net48\InitialArrange.csproj.AssemblyReference.cache
 E:\grasshopper_C#\Campus\InitialArrange\obj\Debug\net48\InitialArrange.GeneratedMSBuildEditorConfig.editorconfig
 E:\grasshopper_C#\Campus\InitialArrange\obj\Debug\net48\InitialArrange.AssemblyInfoInputs.cache

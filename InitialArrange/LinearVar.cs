@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Gurobi;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gurobi;
 
 namespace InitialArrange
 {
@@ -18,7 +14,7 @@ namespace InitialArrange
 
         internal GRBVar road; //唯一变量
         List<Line> resultLine = new List<Line>();
-        
+
         internal List<int> zonesLorB;
         internal List<int> zonesRorT;
         /// <summary>
@@ -28,7 +24,7 @@ namespace InitialArrange
         /// <param name="Direction"></param>
         /// <param name="stroke"></param>
         /// <param name="range"></param>
-        internal LinearVar(int index,int Direction, float stroke, Domain[] range,double unit)
+        internal LinearVar(int index, int Direction, float stroke, Domain[] range, double unit)
         {
             this.index = index;
             this.direction = Direction;
@@ -36,7 +32,7 @@ namespace InitialArrange
             this.range = range;
             this.unit = unit;
         }
-        public void SetVar(GRBModel model,Site site)
+        public void SetVar(GRBModel model, Site site)
         {
             if (Direction == 0)
             {
@@ -57,15 +53,15 @@ namespace InitialArrange
             }
             model.AddRange(road, range[0].min, range[0].max, " ");
         }
-       public List<Line> ResultLine { get => resultLine;}
-        public int Direction { get => direction;}
+        public List<Line> ResultLine { get => resultLine; }
+        public int Direction { get => direction; }
         public float Stroke { get => stroke; }
 
-        internal void LineConstr(GRBModel model, List<ZoneVar> zoneVars,Site site)
+        internal void LineConstr(GRBModel model, List<ZoneVar> zoneVars, Site site)
         {
 
             int c = zoneVars.Count;
-            GRBVar[] road_bools = new GRBVar[ 4];
+            GRBVar[] road_bools = new GRBVar[4];
 
             switch (Direction)
             {
@@ -78,15 +74,15 @@ namespace InitialArrange
                             road_bools[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, " ");
                         }
                         model.AddConstr(zoneVars[d].x - zoneVars[d].dx / 2 + (1 - road_bools[0]) * site.W
-                            >= road + stroke/unit, "x-dx/2>=roadX ");//
+                            >= road + stroke / unit, "x-dx/2>=roadX ");//
                         model.AddConstr(zoneVars[d].x + zoneVars[d].dx / 2 - (1 - road_bools[1]) * site.W
-                            <= road - stroke/unit, "x+dx/2<=roadX ");//
+                            <= road - stroke / unit, "x+dx/2<=roadX ");//
 
                         model.AddConstr(zoneVars[d].y + zoneVars[d].dy / 2 - (1 - road_bools[2]) * site.H
                             <= range[1].min, "  ");//
                         model.AddConstr(zoneVars[d].y - zoneVars[d].dy / 2 + (1 - road_bools[3]) * site.H
                             >= range[1].max, "  ");//
-                        model.AddConstr(road_bools[ 0] + road_bools[1] + road_bools[2] + road_bools[3] == 1, " ");
+                        model.AddConstr(road_bools[0] + road_bools[1] + road_bools[2] + road_bools[3] == 1, " ");
 
                         if (zonesLorB != null && zonesLorB.Contains(zoneVars[d].Zone.Index))
                         {
@@ -99,7 +95,7 @@ namespace InitialArrange
 
                         }
                     }
-                        break;
+                    break;
                 case 1:
                     //横向道路
                     for (int d = 0; d < c; d++)
@@ -108,16 +104,16 @@ namespace InitialArrange
                         {
                             road_bools[i] = model.AddVar(0.0, 1.0, 0.0, GRB.BINARY, " ");
                         }
-                        model.AddConstr(zoneVars[d].y - zoneVars[d].dy / 2 + (1 - road_bools[0]) * site.H >= road + stroke/unit, "y-dy/2>=roadY ");
-                        model.AddConstr(zoneVars[d].y + zoneVars[d].dy / 2 - (1 - road_bools[1]) * site.H <= road - stroke/unit, "y+dy/2<=roadY ");
+                        model.AddConstr(zoneVars[d].y - zoneVars[d].dy / 2 + (1 - road_bools[0]) * site.H >= road + stroke / unit, "y-dy/2>=roadY ");
+                        model.AddConstr(zoneVars[d].y + zoneVars[d].dy / 2 - (1 - road_bools[1]) * site.H <= road - stroke / unit, "y+dy/2<=roadY ");
                         model.AddConstr(zoneVars[d].x + zoneVars[d].dx / 2 - (1 - road_bools[2]) * site.W <= range[1].min, "  ");//
                         model.AddConstr(zoneVars[d].x - zoneVars[d].dx / 2 + (1 - road_bools[3]) * site.W >= range[1].max, "  ");//
 
                         model.AddConstr(road_bools[0] + road_bools[1] + road_bools[2] + road_bools[3] == 1, " ");
-                       
-                        if (zonesLorB!=null&&zonesLorB.Contains(zoneVars[d].Zone.Index))
+
+                        if (zonesLorB != null && zonesLorB.Contains(zoneVars[d].Zone.Index))
                         {
-                            
+
                             model.AddConstr(road_bools[1] == 1, "");
                         }
                         if (zonesRorT != null && zonesRorT.Contains(zoneVars[d].Zone.Index))
@@ -134,9 +130,9 @@ namespace InitialArrange
         {
             float roadLoc;
             roadLoc = (float)road.Xn;
-            
+
             if (Direction == 0)
-               resultLine.Add(new Line(roadLoc, (float)range[1].min, roadLoc, (float)range[1].max));
+                resultLine.Add(new Line(roadLoc, (float)range[1].min, roadLoc, (float)range[1].max));
             else
                 resultLine.Add(new Line((float)range[1].min, roadLoc, (float)range[1].max, roadLoc));
         }
@@ -144,13 +140,13 @@ namespace InitialArrange
         internal void WriteResults(StreamWriter sw, int resultCount)
         {
             string dataStr;
-            dataStr = (stroke/unit).ToString();
+            dataStr = (stroke / unit).ToString();
             for (int n = 0; n < resultCount; n++)
             {
                 try
                 {
                     dataStr += $",({resultLine[n].X1};{resultLine[n].Y1};" +
-                        $"{ resultLine[n].X2 };{resultLine[n].Y2})" ;
+                        $"{ resultLine[n].X2 };{resultLine[n].Y2})";
                 }
                 catch { return; }
             }

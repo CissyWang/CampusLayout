@@ -46,3 +46,4 @@ E:\grasshopper_C#\Campus\AreaCalculator\obj\Debug\net48\IndexCalculate.csproj.Co
 E:\grasshopper_C#\Campus\AreaCalculator\obj\Debug\net48\IndexCalculate.csproj.CopyComplete
 E:\grasshopper_C#\Campus\AreaCalculator\obj\Debug\net48\IndexCalculate.dll
 E:\grasshopper_C#\Campus\AreaCalculator\obj\Debug\net48\IndexCalculate.pdb
+E:\grasshopper_C#\Campus\AreaCalculator\obj\Debug\net48\IndexCalculate.csproj.AssemblyReference.cache

@@ -1,14 +1,11 @@
-﻿  using System;
-using System.Collections.Generic;
-using System.Text;
-using IndexCalculate;
+﻿using System.Collections.Generic;
 //using Calculate_Area.BuildingList;
 //功能分区类
 
 
 namespace InitialArrange
 {
-    public class IGroup:ZoneBasic
+    public class IGroup : ZoneBasic
     {
 
         internal Domain[] domain;
@@ -23,9 +20,9 @@ namespace InitialArrange
 
         public double Stroke { get => stroke; set => stroke = value; }
 
-        public IGroup( int unit):base(unit)
+        public IGroup(int unit) : base(unit)
         {
-            
+
         }
 
     }

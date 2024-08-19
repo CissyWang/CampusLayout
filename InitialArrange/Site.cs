@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace InitialArrange
@@ -56,7 +55,8 @@ namespace InitialArrange
         }
 
         //缩放后的可用面积
-        public float Area (){ 
+        public float Area()
+        {
             float area = w * h;
 
             if (minus != null)
@@ -95,10 +95,10 @@ namespace InitialArrange
                         break;
 
                     case "Frame":
-                            strLine = sr.ReadLine();
-                            str = strLine.Split('(', ';', ')');
-                            oob = new IRectangle(float.Parse(str[1]), float.Parse(str[2]), float.Parse(str[3]), float.Parse(str[4]));
-                            break;
+                        strLine = sr.ReadLine();
+                        str = strLine.Split('(', ';', ')');
+                        oob = new IRectangle(float.Parse(str[1]), float.Parse(str[2]), float.Parse(str[3]), float.Parse(str[4]));
+                        break;
 
                     case "Minus":
                         minus = new List<IRectangle>();
@@ -128,20 +128,20 @@ namespace InitialArrange
         }
 
         /// 读取点、线、面的方法
-        private void ReadPoints(string strLine,StreamReader sr,List<IPoint> points)
+        private void ReadPoints(string strLine, StreamReader sr, List<IPoint> points)
         {
 
-                strLine = sr.ReadLine();
-                string[] str = strLine.Split(',');
-                foreach (string s in str)
+            strLine = sr.ReadLine();
+            string[] str = strLine.Split(',');
+            foreach (string s in str)
+            {
+                if (s.Length > 0)
                 {
-                    if (s.Length > 0)
-                    {
-                        string[] strs = s.Split('(', ';', ')');
-                        points.Add(new IPoint(float.Parse(strs[1]), float.Parse(strs[2])));
-                    }
+                    string[] strs = s.Split('(', ';', ')');
+                    points.Add(new IPoint(float.Parse(strs[1]), float.Parse(strs[2])));
                 }
-            
+            }
+
         }
         private void ReadRects(string strLine, StreamReader sr, List<IRectangle> rects)
         {
@@ -178,17 +178,17 @@ namespace InitialArrange
 
         internal double lineDistMax(Line l)
         {
-            double dist=0;
-            for(int i = 0; i < w; i++)
+            double dist = 0;
+            for (int i = 0; i < w; i++)
             {
-                for(int j = 0; j < h; j++)
+                for (int j = 0; j < h; j++)
                 {
-                    double dist1 = (i * l.A + j * l.B + l.C)* (i * l.A + j * l.B + l.C) /(l.A * l.A + l.B * l.B);
+                    double dist1 = (i * l.A + j * l.B + l.C) * (i * l.A + j * l.B + l.C) / (l.A * l.A + l.B * l.B);
                     if (dist1 > dist)
                         dist = dist1;
                 }
             }
-            
+
             return dist;
         }
 

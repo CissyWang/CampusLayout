@@ -28,26 +28,26 @@ namespace IndexCalculate
             this.site_area = site_area;
         }
 
-        public double Site_area(List<string>strs)
-        {
-            if (buildings != null)
-            {
-                //site_area = buildings.Site_area_all();
+        //public double Site_area(List<string>strs)
+        //{
+        //    if (buildings != null)
+        //    {
+        //        //site_area = buildings.Site_area_all();
 
-                    for (int i = 0; i < buildings.Count; i++)
-                    {
-                        strs.Add("  " + (i + 1) + "." + buildings[i].Name + "  用地面积 ：" + buildings[i].Site_area);
-                    }
-                    //strs.Add("  总用地面积 ：" + site_area + "\r\n");
+        //            for (int i = 0; i < buildings.Count; i++)
+        //            {
+        //                strs.Add("  " + (i + 1) + "." + buildings[i].Name + "  用地面积 ：" + buildings[i].Site_area);
+        //            }
+        //            //strs.Add("  总用地面积 ：" + site_area + "\r\n");
 
-                return site_area;
-            }
-            else
-            {
-                strs.Add(" 总用地面积" + site_area);
-                return site_area;
-            }
-        }
+        //        return site_area;
+        //    }
+        //    else
+        //    {
+        //        strs.Add(" 总用地面积" + site_area);
+        //        return site_area;
+        //    }
+        //}
         public double Site_area()
         {
             if (buildings != null)

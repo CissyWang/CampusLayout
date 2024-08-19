@@ -1,4 +1,6 @@
-﻿using System;
+﻿//用于测试布局部分
+
+using System;
 using Flowing;
 using InitialArrange;
 using System.Drawing;
@@ -26,7 +28,7 @@ namespace User
         public void SetUp()
         {
             #region***初始化设置***
-            myCal = new Calculator(@"../Configuration/config4.3.xml");    
+            myCal = new Calculator(@"../Configuration/configXA.xml");    
             unit = myCal.Unit;
             resultCount = myCal.ResultCount;
             #endregion
@@ -104,9 +106,9 @@ namespace User
                 //TextSize(unit);
                 Translate(unit * poi.p, unit * poi.q);
                 TextAlign(0, 1);
-                    TextSize(unit);
+                TextSize(unit);
         
-                   Text("P" + entrs.IndexOf(poi).ToString(), 0, -40, 0);
+                Text("P" + entrs.IndexOf(poi).ToString(), 0, -40, 0);
                 Sphere(0.3f * unit);
                 PopMatrix();
                 }

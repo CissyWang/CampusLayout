@@ -9,10 +9,8 @@ namespace IndexCalculate
         string name;
         string zone_name;
         int layer;
-        //double area_per;
         double density;
         double area;
-        
         int index;
 
         internal Building(int index,string name, int layer, double area, double density,string zone)

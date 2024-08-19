@@ -3,21 +3,19 @@
 ///通过XmlParser读取布局要求，运行优化，将结果导出。
 
 
+using CampusClass;
+using Gurobi;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Gurobi;
-using Flowing;
-using IndexCalculate;
 using System.IO;
+using System.Text;
 
 namespace InitialArrange
 {
     public enum InOrOut
     {
-        None=0,
+        None = 0,
         Inside = 1,
         Outside = 2
     }
@@ -52,7 +50,7 @@ namespace InitialArrange
         double layoutDensity;//场地占用率
         protected float[] areaResult;//分区结果总面积
 
-        string mode="";
+        string mode = "";
         internal IGroup core;//中心区
         ZoneVar coreVar;//中心区变量
         internal List<Axis> axes;//输入轴线，常量
@@ -67,8 +65,33 @@ namespace InitialArrange
             XmlParser parser = new XmlParser(xmlFilePath);
             parser.BasicSettings(this);
 
-            //读取分区并新建
-            ReadZones(parser.Filepaths[0]); //
+            //如果有json，利用json
+            string jsonPath = parser.Filepaths[0].Replace(".csv", ".json");
+            string json = "";
+            try
+            {
+                json = File.ReadAllText(jsonPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("读取JSON时发生错误：" + ex.Message);
+            }
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new BuildingListConverter() }
+            };
+            List<Zone> zonesOri = JsonConvert.DeserializeObject<List<Zone>>(json, settings);
+            //List<Zone> zonesOri = JsonConvert.DeserializeObject<List<Zone>>(json);
+            foreach (Zone d in zonesOri)
+            {
+                IZone newD = new IZone(d, unit);
+                zones.Add(newD);
+            }
+
+
+
+            //从csv读取分区并新建或只是读取数量
+            ReadZones(parser.Filepaths[0]);
             SetZoneVar();
             dvCount = zoneVars.Count; //读取分区数量
             Console.WriteLine("分区变量：" + dvCount + "项");
@@ -108,7 +131,9 @@ namespace InitialArrange
             try
             {
                 GRBEnv env = new GRBEnv(true);
-                env.Set("LogFile", "mip1.log");
+                var s = fileName.Replace("csv", "log");
+                env.Set("LogFile", s);
+
                 env.Start();
 
                 GRBModel model = new GRBModel(env);
@@ -235,7 +260,7 @@ namespace InitialArrange
 
         ///****读取分区信息***
         // 连接上一步的
-        private void ReadZones(string path)  
+        private void ReadZones(string path)
         {
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(fs, Encoding.UTF8);
@@ -304,8 +329,8 @@ namespace InitialArrange
             //变量初始设置
             foreach (ZoneVar dv in zoneVars)
             {
-                dv.SetVar(model);
-                dv.SiteConstr(model);
+                dv.SetVar(model, spacing);
+                dv.SiteConstr(model, spacing);
                 //model.AddConstr(dv.dx >= lengthMin, "");
                 //model.AddConstr(dv.dy >= lengthMin, "");
             }
@@ -491,23 +516,25 @@ namespace InitialArrange
                 coreVar = new ZoneVar(site, core.domain, isInteger, core.lenToWidth); //在这里新建变量
             else
                 coreVar = new ZoneVar(site, isInteger, core.lenToWidth);
-            coreVar.SetVar(model);
-            coreVar.SiteConstr(model);
-            for(int a = 0; a < zones.Count; a++) {
-                foreach(ZoneVar dv in zones[a].zoneVars)
+            coreVar.SetVar(model, spacing);
+            coreVar.SiteConstr(model, spacing);
+            for (int a = 0; a < zones.Count; a++)
+            {
+                foreach (ZoneVar dv in zones[a].zoneVars)
                 {
                     var b = core.outsideZones != null && core.outsideZones.Contains(a);
                     //必须在内
                     if (core.insideZones != null && core.insideZones.Contains(a))
                     {
-                         dv.inOrOutOthers(model, coreVar, core.stroke/unit, InOrOut.Inside, core.insideAlign);
+                        dv.inOrOutOthers(model, coreVar, core.stroke / unit, InOrOut.Inside, core.insideAlign);
                     }
                     //必须在外
-                    else if (core.insideOnly&&!b)
+                    else if (core.insideOnly && !b)
                     {
-                        dv.inOrOutOthers(model, coreVar, core.stroke/unit, InOrOut.Outside, false);
-                    }else if(b)
-                        dv.inOrOutOthers(model, coreVar, core.stroke / unit, InOrOut.Outside,core.outsideAlign); 
+                        dv.inOrOutOthers(model, coreVar, core.stroke / unit, InOrOut.Outside, false);
+                    }
+                    else if (b)
+                        dv.inOrOutOthers(model, coreVar, core.stroke / unit, InOrOut.Outside, core.outsideAlign);
                     else
                     {
                         dv.inOrOutOthers(model, coreVar, core.stroke / unit, InOrOut.None, false);
@@ -520,8 +547,7 @@ namespace InitialArrange
             return expr;
         }
 
-     
-         protected void AxisObj(GRBModel model)
+        protected void AxisObj(GRBModel model)
         {
             if (axes == null)
                 return;
@@ -533,7 +559,7 @@ namespace InitialArrange
                     {
                         foreach (ZoneVar dv in zones[jj].zoneVars)
                         {
-                            dv.LineAlign(model, axes[i], axes[i].width/unit);
+                            dv.LineAlign(model, axes[i], axes[i].width / unit);
                         }
                     }
                 }
@@ -544,13 +570,12 @@ namespace InitialArrange
                     {
                         foreach (ZoneVar dv in zones[j].zoneVars)
                         {
-                            dv.LineAlign(model, axes[i], axes[i].buffer/unit,axes[i].isCenter);
+                            dv.LineAlign(model, axes[i], axes[i].buffer / unit, axes[i].isCenter);
                         }
                     }
                 }
             }
         }
-
 
         protected GRBLinExpr GroupObj(GRBModel model)
         {
@@ -567,9 +592,9 @@ namespace InitialArrange
 
                 ZoneVar g;
                 g = new ZoneVar(site, isInteger, IG.lenToWidth);
-                g.SetVar(model);
-                g.SiteConstr(model);
-                IG.zoneVar=g;
+                g.SetVar(model, spacing);
+                g.SiteConstr(model, spacing);
+                IG.zoneVar = g;
                 GroupVars.Add(g);
 
                 //限制在组团内
@@ -604,27 +629,26 @@ namespace InitialArrange
             return expr;
         }
 
-
         protected void GridObj(GRBModel model)
         {
-            for(int i=0;i< gridVars.Count; i++)
+            for (int i = 0; i < gridVars.Count; i++)
             {
-                gridVars[i].SetVar(model,site);
-                gridVars[i].LineConstr(model,zoneVars,site);
+                gridVars[i].SetVar(model, site);
+                gridVars[i].LineConstr(model, zoneVars, site);
             }
         }
         #endregion
 
         #region 封装
         public ZoneVar CoreVar { get => coreVar; set => coreVar = value; }
-        public List<Axis> Axes { get => axes;}
+        public List<Axis> Axes { get => axes; }
         public List<IGroup> Groups { get => groups; }
 
         public string Mode { get => mode; set => mode = value; }
         public List<ZoneVar> GroupVars { get => groupVars; set => groupVars = value; }
         public IGroup Core { get => core; set => core = value; }
         public List<LinearVar> GridVars { get => gridVars; }
-  
+
         public string SiteCsv { set => SiteCsv = value; }
 
         public int IsInteger { set => isInteger = value; }

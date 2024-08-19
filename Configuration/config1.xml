@@ -15,7 +15,7 @@
 	
 	<filepath>
 		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
-		<zoneFile> ../../南工职大/应用/export1.2.csv </zoneFile>
+		<zoneFile> ../../南工职大/应用/export1.2-0.csv </zoneFile>
 		<siteFile>../../南工职大/应用/site0.csv</siteFile>
 		<locationFile>../../location_newtest.csv</locationFile>
 	</filepath>
@@ -31,11 +31,12 @@
 		<!--间距-->
 		<Spacing>12</Spacing>
 		<!--面积浮动范围-->
-		<AreaFloats min="1" max="1.4"/>
+		<AreaFloats min="1" max="1.32"/>
 		<!--密度-->
 		<Density>0.7</Density>
 		<!--子分区 分配面积下限-->
 		<AreaSep>0.7</AreaSep>
+		<AreaSep zoneID="19">0.5</AreaSep>
 		<!--运动场尺寸-->
 		<SportArea>
 			<Width>150</Width>
@@ -85,16 +86,15 @@
 		</Groups>
 
 		<Grids>
-			<xGrid id="0"  width="0.5">
+			<xGrid id="0"  stroke="10">
 				<domain>
-					<yrange min="8" max="13"/>
-					<xrange startX="0" startY="39"/>
+					<Domain yrange= "{8,13}" xrange="{0,39}"/>
+					<ControlZones zoneIDs="{10,11,12,13,14}" side="bottom"/>
 				</domain>
 			</xGrid>
 			<yGrid id="0"  width="0.5">
 				<domain>
-					<xrange min="27" max="35"/>
-					<yrange startX="0" startY="22"/>
+					<Domain yrange= "{8,13}" xrange="{0,39}"/>
 				</domain>
 			</yGrid>
 		</Grids>

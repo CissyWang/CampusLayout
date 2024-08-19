@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InitialArrange
 {
@@ -23,18 +19,19 @@ namespace InitialArrange
                 b = -1;
                 c = p1.q - a * p1.p;
             }
-            else {
+            else
+            {
                 a = -1;
                 b = 0;
                 c = p1.p;
 
             }
         }
-        public Line(float x1,float y1,float x2,float y2 )
+        public Line(float x1, float y1, float x2, float y2)
         {
 
-            this.p1 = new IPoint(x1,y1);
-            this.p2 = new IPoint(x2,y2);
+            this.p1 = new IPoint(x1, y1);
+            this.p2 = new IPoint(x2, y2);
             if (p1.p - p2.p != 0)
             {
                 a = (p1.q - p2.q) / (p1.p - p2.p);
@@ -76,10 +73,10 @@ namespace InitialArrange
 
 
         //判断点在线上
-        public bool OnLine(IPoint poi,float tolerance)
+        public bool OnLine(IPoint poi, float tolerance)
         {
-            bool onLine=false;
-            if (Math.Abs(a * poi.p +b*poi.q+c)<=tolerance)
+            bool onLine = false;
+            if (Math.Abs(a * poi.p + b * poi.q + c) <= tolerance)
                 onLine = true;
 
             return onLine;

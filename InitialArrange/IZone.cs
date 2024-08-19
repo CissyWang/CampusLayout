@@ -1,37 +1,34 @@
-﻿  using System;
-using System.Collections.Generic;
-using System.Text;
-using IndexCalculate;
+﻿using CampusClass;
 //using Calculate_Area.BuildingList;
 //功能分区类
 
 
 namespace InitialArrange
 {
-    public class IZone:ZoneBasic
+    public class IZone : ZoneBasic
     {
         internal ZoneVar[] zoneVars;
-        int count=1;
+        int count = 1;
         public string name;
         internal double building_area;
         double length_min;
         BuildingList buildings;
         internal Domain area_lim;
-        public IZone(Zone d, int unit):base(unit)
+        public IZone(Zone d, int unit) : base(unit)
         {
             this.index = d.Index;
-            
+
             this.unit = unit;
             if (d.Buildings != null)
             {
                 this.buildings = d.Buildings;
             }
             this.name = d.Name;
-            this.site_area = d.Site_area();
+            this.site_area = d.Site_area;
 
-            this.building_area = d.buildingArea();
+            this.building_area = d.BuildingArea;
         }
-        public IZone(int index,string name, double area, double building_area,  int d_count, int unit):base(unit) 
+        public IZone(int index, string name, double area, double building_area, int d_count, int unit) : base(unit)
         {
             this.index = index;
             this.unit = unit;

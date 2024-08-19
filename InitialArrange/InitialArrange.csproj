@@ -39,18 +39,21 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 
 
   <ItemGroup>
-    <ProjectReference Include="..\AreaCalculator\IndexCalculate.csproj" />
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
   </ItemGroup>
 
 
 
   <ItemGroup>
+    <Reference Include="CampusClass">
+      <HintPath>..\..\CampusClass\CampusClass\bin\Release\CampusClass.dll</HintPath>
+    </Reference>
     <Reference Include="Flowing">
       <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
     </Reference>
