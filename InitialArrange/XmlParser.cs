@@ -1,13 +1,7 @@
 ﻿//从xml文件中读取信息并配置给calculator
-using InitialArrange;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace InitialArrange
@@ -23,14 +17,6 @@ namespace InitialArrange
             {
                 // Load the XML document
                 _doc = XDocument.Load(xmlFilePath);
-
-                // Parse the sections of the XML document
-                //ParseVisulization();
-                //ParseBasic();
-                //ParseFilepath();
-                //ParseShape();
-                //ParseTopology();
-                //// You can add more methods to parse other sections here
             }
             catch (Exception ex)
             {
@@ -97,7 +83,8 @@ namespace InitialArrange
         private void SetLenToWidth(XElement Xelement, List<ZoneVar> zoneVars)
         {
             double lenToWidth = double.Parse(Xelement.Element("LenToWidth")?.Value);//
-            if (lenToWidth > 0) {
+            if (lenToWidth > 0)
+            {
                 foreach (ZoneVar dv in zoneVars)
                 {
                     dv.lenToWidth = lenToWidth;
@@ -148,7 +135,8 @@ namespace InitialArrange
                 if (e.Attribute("zoneID") != null)
                 {
                     var index = ParseIntArray(e.Attribute("zoneID").Value);
-                    foreach (int i in index) {
+                    foreach (int i in index)
+                    {
                         zones[i].area_lim = new Domain(min * zones[i].S, max * zones[i].S);
                     }
 
@@ -212,7 +200,7 @@ namespace InitialArrange
         private void SetSportsArea(XElement Xelement, Calculator cal)
         {
             var a = Xelement.Elements("SportArea")?.Elements().Select(e => double.Parse(e.Value)).ToArray();
-            if (a.Length > 0) 
+            if (a.Length > 0)
                 cal.SportInfo = a;
             else
                 cal.SportInfo = new double[2] { 0, 0 };
@@ -254,30 +242,30 @@ namespace InitialArrange
                     var xrange = ParseDoubleArray(core_domain.Attribute("xrange").Value);
                     var yrange = ParseDoubleArray(core_domain.Attribute("yrange").Value);
 
-                    if (core_domain.Attribute("widthDomain") != null& core_domain.Attribute("lengthDomain")!=null)
+                    if (core_domain.Attribute("widthDomain") != null & core_domain.Attribute("lengthDomain") != null)
                     {
                         var widthDomain = ParseDoubleArray(core_domain.Attribute("widthDomain").Value);
                         var lengthDomain = ParseDoubleArray(core_domain.Attribute("lengthDomain").Value);
-                        cal.core.domain = new Domain[4]{ new Domain(xrange), new Domain(yrange), new Domain(widthDomain),new Domain( lengthDomain) };
+                        cal.core.domain = new Domain[4] { new Domain(xrange), new Domain(yrange), new Domain(widthDomain), new Domain(lengthDomain) };
                     }
                     else
                     {
-                        cal.core.domain= new Domain[2] { new Domain(xrange), new Domain(yrange) }; //不限定长宽
+                        cal.core.domain = new Domain[2] { new Domain(xrange), new Domain(yrange) }; //不限定长宽
                     }
-                    cal.core.minimizeWeight=double.Parse(coreElement.Element("minimizeWeight").Value);
+                    cal.core.minimizeWeight = double.Parse(coreElement.Element("minimizeWeight").Value);
 
                     if (coreElement.Element("insideZone") != null)
                     {
                         bool isOnly = Boolean.Parse(coreElement.Element("insideZone").Attribute("isOnly").Value);
                         bool isAlign = Boolean.Parse(coreElement.Element("insideZone").Attribute("isAlign").Value);
                         string zoneID = coreElement.Element("insideZone").Attribute("zoneID").Value.Trim('{', '}');
-                        SetInsideGroup(cal.core,zoneID, isOnly, isAlign,cal);
+                        SetInsideGroup(cal.core, zoneID, isOnly, isAlign, cal);
                     }
                     if (coreElement.Element("outsideZone") != null)
                     {
                         bool isAlign_out = bool.Parse(coreElement.Element("outsideZone").Attribute("isAlign").Value);
                         string zoneID_out = coreElement.Element("outsideZone").Attribute("zoneID").Value.Trim('{', '}');
-                        SetOutsideGroup(cal.core,zoneID_out, isAlign_out,cal);
+                        SetOutsideGroup(cal.core, zoneID_out, isAlign_out, cal);
                     }
                 }
             }
@@ -307,13 +295,13 @@ namespace InitialArrange
                         };
                         if (groupXE.Attribute("lenToWidth") != null)
                         {
-                           
+
                             var l2w = double.Parse(groupXE.Attribute("lenToWidth").Value);
                             newGroup.lenToWidth = l2w;
                         }
 
-                        var zones = groupXE.Attribute("zoneID").Value.Trim( '{','}');
-                        SetInsideGroup(newGroup, zones, true, false,cal);
+                        var zones = groupXE.Attribute("zoneID").Value.Trim('{', '}');
+                        SetInsideGroup(newGroup, zones, true, false, cal);
 
                         cal.groups.Add(newGroup);
                     }
@@ -396,7 +384,7 @@ namespace InitialArrange
                 var xrange = ParseDoubleArray(xgridXE.Element("Domain").Attribute("xrange")?.Value);
                 var yrange = ParseDoubleArray(xgridXE.Element("Domain").Attribute("yrange")?.Value);
                 var range = new Domain[2] { new Domain(xrange[0], xrange[1]), new Domain(yrange[0], yrange[1]) };
-                var xgrid = new LinearVar(id, dir, stroke, range,Unit);
+                var xgrid = new LinearVar(id, dir, stroke, range, Unit);
 
                 if (xgridXE.Element("ControlZones") != null)
                 {
@@ -407,7 +395,7 @@ namespace InitialArrange
                         sideN = 1;
                     else
                         sideN = 0;
-                    SetGridControl(xgrid, zones, sideN,cal);
+                    SetGridControl(xgrid, zones, sideN, cal);
                 }
                 cal.gridVars.Add(xgrid);
 

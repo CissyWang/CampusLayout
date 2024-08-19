@@ -51,14 +51,13 @@
     <StartupObject>User.ProgramNew</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CampusClass, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CampusClass\CampusClass\bin\Release\CampusClass.dll</HintPath>
+    </Reference>
     <Reference Include="Flowing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
-    </Reference>
-    <Reference Include="IndexCalculate, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Solution\net48\IndexCalculate.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -76,7 +75,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalculatorTest.cs" />
     <Compile Include="ProgramNew.cs" />
     <Compile Include="TestNew.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

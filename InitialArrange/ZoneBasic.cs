@@ -1,10 +1,4 @@
-﻿  using System;
-using System.Collections.Generic;
-using System.Text;
-using IndexCalculate;
-
-//分区基础类，包括功能分区、组团、核等等
-
+﻿//分区基础类，包括功能分区、组团、核等等
 
 namespace InitialArrange
 {
@@ -14,7 +8,7 @@ namespace InitialArrange
         internal int unit;
 
         internal double site_area;
-       internal double lenToWidth=3;
+        internal double lenToWidth = 3;
 
         public ZoneBasic(int unit)
         {
@@ -22,7 +16,7 @@ namespace InitialArrange
         }
         public int Index { get => index; }
 
-        public double Site_area { get => site_area; set => site_area = value; }      
+        public double Site_area { get => site_area; set => site_area = value; }
         public double S { get => site_area / unit / unit; }
 
 

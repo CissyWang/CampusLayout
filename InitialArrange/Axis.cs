@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InitialArrange
+﻿namespace InitialArrange
 {
-    public class Axis  : Line
+    public class Axis : Line
     {
         internal double width;//轴线宽度
 

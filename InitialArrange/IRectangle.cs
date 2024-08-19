@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
 
 namespace InitialArrange
 {
@@ -16,7 +13,7 @@ namespace InitialArrange
         //private float area;
         float dx;
         float dy;
-        
+
 
         public IRectangle(float x1, float y1, float x2, float y2)
         {
@@ -40,13 +37,13 @@ namespace InitialArrange
         }
 
         public float X1 { get => x1; }
-        public float Y1 { get => y1;  }
+        public float Y1 { get => y1; }
         public float X2 { get => x2; }
         public float Y2 { get => y2; }
 
-        
-        public IPoint Center { get => center;  }
-        public float Area { get => dx*dy; }
+
+        public IPoint Center { get => center; }
+        public float Area { get => dx * dy; }
         public float Dx { get => dx; set => dx = value; }
         public float Dy { get => dy; set => dy = value; }
     }

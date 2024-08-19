@@ -1,8 +1,9 @@
-﻿using System;
+﻿//完整流程
+using System;
 using Flowing;
 using InitialArrange;
 using System.Drawing;
-using IndexCalculate;
+using CampusClass;
 
 namespace User
 {
@@ -32,9 +33,7 @@ namespace User
         public void SetUp()
         {
             #region***初始化设置***
-            campus = new Campus((schoolType)4, 10000, 48.5, 1.0, fileName1, fileName2, exportPath);
-            campus.Run();
-            myCal = new Calculator(@"../Configuration/config4.3.xml",campus);    
+            myCal = new Calculator(@"../Configuration/config4.3.xml");    
             unit = myCal.Unit;
             resultCount = myCal.ResultCount;
             #endregion
@@ -185,7 +184,7 @@ namespace User
                 
                 if (info)
                 {
-                    double buildingArea = dv.Area(resultN,unit) * dv.Zone.Building_area / dv.Zone.Result_area(resultN);
+                    double buildingArea = dv.Area(resultN,unit) * dv.Zone.Building_area / dv.Zone.Result_area(resultN);//
                     double siteArea = Math.Round(dv.Area(resultN,unit), 0);
                     buildingArea = Math.Round(buildingArea, 0);
                     double temp = Math.Round(siteArea, 1);
@@ -196,6 +195,7 @@ namespace User
                     Text(index, unit * rect.Center.p, unit * rect.Center.q, 0);//文字
                 }
             }
+            //建筑信息
             if (build)
             {
 

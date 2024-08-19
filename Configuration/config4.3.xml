@@ -14,7 +14,7 @@
 	</basic>
 	<filepath>
 		<!--zoneFile 是有子分区数量信息的表格，默认为1 之后有用户界面可修改。另外可以改成json输入-->
-		<zoneFile> ../../test/4.3/export1.csv </zoneFile> 
+		<zoneFile> ../../test/4.3/export.csv </zoneFile> 
 		<siteFile>../../test/4.3/site.csv</siteFile>
 		<locationFile>../../test/4.3/locationT.csv</locationFile>
 	</filepath>

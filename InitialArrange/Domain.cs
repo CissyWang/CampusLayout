@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace InitialArrange
 {
@@ -9,7 +7,7 @@ namespace InitialArrange
         public double min;
         public double max;
 
-        public Domain(double min,double max)
+        public Domain(double min, double max)
         {
             if (min <= max)
             {
