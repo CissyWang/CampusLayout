@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32901.82
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IndexCalculate", "..\AreaCalculator\IndexCalculate.csproj", "{C42F2E6C-30A7-428D-A187-E7C0874CC1E0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "..\User\User.csproj", "{E1E45746-BC46-496A-8AFE-BDE65CA3D3A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InitialArrange", "..\InitialArrange\InitialArrange.csproj", "{75C24B5F-E997-47F3-BD48-1C4817471BCF}"
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C42F2E6C-30A7-428D-A187-E7C0874CC1E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C42F2E6C-30A7-428D-A187-E7C0874CC1E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C42F2E6C-30A7-428D-A187-E7C0874CC1E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C42F2E6C-30A7-428D-A187-E7C0874CC1E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E1E45746-BC46-496A-8AFE-BDE65CA3D3A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E1E45746-BC46-496A-8AFE-BDE65CA3D3A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1E45746-BC46-496A-8AFE-BDE65CA3D3A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
