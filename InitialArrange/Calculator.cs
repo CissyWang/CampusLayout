@@ -71,25 +71,23 @@ namespace InitialArrange
             try
             {
                 json = File.ReadAllText(jsonPath);
+                var settings = new JsonSerializerSettings
+                {
+                    Converters = new List<JsonConverter> { new BuildingListConverter() }
+                };
+                List<Zone> zonesOri = JsonConvert.DeserializeObject<List<Zone>>(json, settings);
+                //List<Zone> zonesOri = JsonConvert.DeserializeObject<List<Zone>>(json);
+                foreach (Zone d in zonesOri)
+                {
+                    IZone newD = new IZone(d, unit);
+                    zones.Add(newD);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("读取JSON时发生错误：" + ex.Message);
             }
-            var settings = new JsonSerializerSettings
-            {
-                Converters = new List<JsonConverter> { new BuildingListConverter() }
-            };
-            List<Zone> zonesOri = JsonConvert.DeserializeObject<List<Zone>>(json, settings);
-            //List<Zone> zonesOri = JsonConvert.DeserializeObject<List<Zone>>(json);
-            foreach (Zone d in zonesOri)
-            {
-                IZone newD = new IZone(d, unit);
-                zones.Add(newD);
-            }
-
-
-
+            
             //从csv读取分区并新建或只是读取数量
             ReadZones(parser.Filepaths[0]);
             SetZoneVar();
@@ -259,7 +257,6 @@ namespace InitialArrange
         }
 
         ///****读取分区信息***
-        // 连接上一步的
         private void ReadZones(string path)
         {
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -296,7 +293,7 @@ namespace InitialArrange
                         zones[index].Site_area = d_siteArea;//
                         zones[index].Count = d_count;
                     }
-                    else//不连接上一步时
+                    else//没有json时
                     {
                         var zone = new IZone(index, strs[0], d_siteArea, Convert.ToDouble(strs[3]), d_count, unit);
                         dvCount += d_count;//总的分区变量数量

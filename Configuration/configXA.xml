@@ -21,7 +21,7 @@
 	</basic>
 	<filepath>
 		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
-		<zoneFile> ../../中文投稿/雄安大学城资料/export.csv </zoneFile>
+		<zoneFile> ../../中文投稿/雄安大学城资料/export3.csv </zoneFile>
 		<siteFile>../../中文投稿/雄安大学城资料/siteC.csv</siteFile>
 		<locationFile>../../中文投稿/雄安大学城资料/location.csv</locationFile>
 	</filepath>

@@ -7,7 +7,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "..\User\User.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InitialArrange", "..\InitialArrange\InitialArrange.csproj", "{75C24B5F-E997-47F3-BD48-1C4817471BCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "..\Configuration\Configuration.csproj", "{C04CF7FB-DF92-469A-924A-2CA7EA20B2C7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{7BA76AE8-2F61-4938-9A1F-445845486BB0}"
+	ProjectSection(SolutionItems) = preProject
+		..\Configuration\config1.xml = ..\Configuration\config1.xml
+		..\Configuration\config4.1.xml = ..\Configuration\config4.1.xml
+		..\Configuration\config4.2.xml = ..\Configuration\config4.2.xml
+		..\Configuration\config4.3.xml = ..\Configuration\config4.3.xml
+		..\Configuration\configCoreTest.xml = ..\Configuration\configCoreTest.xml
+		..\Configuration\configPointTest.xml = ..\Configuration\configPointTest.xml
+		..\Configuration\configXA.xml = ..\Configuration\configXA.xml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +32,6 @@ Global
 		{75C24B5F-E997-47F3-BD48-1C4817471BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75C24B5F-E997-47F3-BD48-1C4817471BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75C24B5F-E997-47F3-BD48-1C4817471BCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C04CF7FB-DF92-469A-924A-2CA7EA20B2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C04CF7FB-DF92-469A-924A-2CA7EA20B2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C04CF7FB-DF92-469A-924A-2CA7EA20B2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C04CF7FB-DF92-469A-924A-2CA7EA20B2C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
