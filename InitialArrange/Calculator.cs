@@ -273,7 +273,7 @@ namespace InitialArrange
                     continue;
                 }
 
-                if (str.Contains("分区名"))
+                if (str.Contains("分区名")||str.Contains("名称"))
                 {
                     start = true;
                     continue;
@@ -292,6 +292,7 @@ namespace InitialArrange
                     {
                         zones[index].Site_area = d_siteArea;//
                         zones[index].Count = d_count;
+                        dvCount += d_count;
                     }
                     else//没有json时
                     {

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!--每次的配置文件要可以存储-->
+<!--每次的配置文件要备份-->
 <!--unit: m-->
 <configuration>
 
@@ -87,15 +87,12 @@
 
 		<Grids>
 			<xGrid id="0"  stroke="10">
-				<domain>
+				
 					<Domain yrange= "{8,13}" xrange="{0,39}"/>
 					<ControlZones zoneIDs="{10,11,12,13,14}" side="bottom"/>
-				</domain>
 			</xGrid>
-			<yGrid id="0"  width="0.5">
-				<domain>
+			<yGrid id="0"  stroke="0.5">
 					<Domain yrange= "{8,13}" xrange="{0,39}"/>
-				</domain>
 			</yGrid>
 		</Grids>
 		

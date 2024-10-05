@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 		..\Configuration\config4.3.xml = ..\Configuration\config4.3.xml
 		..\Configuration\configCoreTest.xml = ..\Configuration\configCoreTest.xml
 		..\Configuration\configPointTest.xml = ..\Configuration\configPointTest.xml
-		..\Configuration\configXA.xml = ..\Configuration\configXA.xml
+		..\Configuration\configXA_A.xml = ..\Configuration\configXA_A.xml
+		..\Configuration\configXA_B.xml = ..\Configuration\configXA_B.xml
+		..\Configuration\configXA_C.xml = ..\Configuration\configXA_C.xml
 	EndProjectSection
 EndProject
 Global

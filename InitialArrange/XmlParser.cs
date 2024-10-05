@@ -162,7 +162,7 @@ namespace InitialArrange
         }
         private void SetAreaSep(XElement Xelement, List<IZone> zones)
         {
-            var elements = Xelement.Elements("SepArea");
+            var elements = Xelement.Elements("AreaSep");
             if (elements.Count() == 0)
                 return;
             double k = 0;
@@ -173,11 +173,12 @@ namespace InitialArrange
                 {
                     continue;
                 }
-                if (e.Attribute("zoneID") != null)
+                //未指定
+                if (e.Attribute("zoneID") == null)
                 {
                     foreach (IZone d in zones)
                     {
-                        if (d.Count > 1 && d.Building_area > 0) //户外体育不受影响
+                        if (d.Count > 1 ) //户外体育不受影响
                         {
                             foreach (ZoneVar dv in d.zoneVars)
                             {
@@ -187,6 +188,7 @@ namespace InitialArrange
                     }
                     continue;
                 }
+                //指定
                 int index = int.Parse(e.Attribute("zoneID").Value);
                 if (zones[index].Count > 1)
                 {
@@ -430,6 +432,7 @@ namespace InitialArrange
         {
             if (axesElement != null)
             {
+                cal.axes = new List<Axis>();
                 if (cal.Mode.Length != 0)
                     cal.Mode += ",Axes";
                 else
@@ -442,7 +445,7 @@ namespace InitialArrange
                         var startPt = ParseFloatArray(axisXE.Attribute("startPt").Value);
                         var endPt = ParseFloatArray(axisXE.Attribute("endPt").Value);
                         var axis = new Axis(startPt[0], startPt[1], endPt[0], endPt[1]);
-                        axis.width = double.Parse(axisXE.Attribute("width")?.Value);
+                        axis.width = double.Parse(axisXE.Attribute("stroke")?.Value);
                         if (axisXE.Element("asRealAxis") != null)
                         {
                             axis.asideZones = ParseIntArray(axisXE.Element("asRealAxis").Attribute("zoneID").Value);

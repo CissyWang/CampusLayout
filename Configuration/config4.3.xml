@@ -72,7 +72,7 @@
 		</Core>
 
 		<!--<Axes>
-			<Axis id="0" startPt="{37,27}" endPt ="{53,27}" width="18"> 
+			<Axis id="0" startPt="{37,27}" endPt ="{53,27}" stroke="18"> 
 				--><!--点的坐标还未缩放???--><!--
 				<asRealAxis  zoneID="{0,1,2}"/>
 			</Axis>

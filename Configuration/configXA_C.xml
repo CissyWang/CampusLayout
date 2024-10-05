@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--unit: m-->
+<!--test 4.1 场地测试-->
+<!--问题记录
+*1.boundry保留两位小数比保留一位要快（结果不一样，数值差不多）
+*2.minus超出范围计算不出来
+ *3.不同的searchMode计算结果和耗时不一样：1最慢，0中等，2最快（由最优到满足限制）
+（0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解）
+*4.对面积（总面积）限制合理可以算得更快-->
+
+<configuration>
+
+	<basic>
+		<unit>20</unit>
+		<resultCount>5</resultCount>
+		<time>100</time>
+		<!--searchMode:  0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解-->
+		<searchMode>2</searchMode>
+		<!--0=false, 1=true-->
+		<isInteger> 0 </isInteger>
+	</basic>
+	<filepath>
+		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
+		<zoneFile> ../../中文投稿/雄安大学城资料/export33.csv </zoneFile>
+		<siteFile>../../中文投稿/雄安大学城资料/siteC.csv</siteFile>
+		<locationFile>../../中文投稿/雄安大学城资料/location33-22.csv</locationFile>
+	</filepath>
+	<weights>
+		<areaWeight>1</areaWeight>
+		<distWeight>1</distWeight>
+	</weights>  
+	<Shape>
+		<!--长宽比-->
+		<LenToWidth>2</LenToWidth>
+		<!--最小边长-->
+		<MinLength>60</MinLength>   
+		<!--间距-->
+		<Spacing>8</Spacing>
+		<AreaFloats min="0.9" max="1.1"/>
+		<AreaSep>0.8</AreaSep>
+		<!--密度-->
+		<!--<Density>0.7</Density>
+		<TotalArea>300000</TotalArea>-->
+	</Shape>
+	<Topology>
+		<PointLinks>
+			<PointLink zoneID="{6}" poiNum="4"/>
+			<!--<PointLink zoneID="{0}" poiNum="1"/>-->
+		</PointLinks>
+		<RoadLinks>
+			<RoadLink type="oneSide" zoneID="{12,13,14}" side="1"  roadNum="3"/>
+			<RoadLink type="oneSide" zoneID="{11}" side="1"  roadNum="2"/>
+		</RoadLinks>	
+		<ZoneLinks>
+			<!--<ZoneLink type="near" zoneID="{8,9}" />
+			<ZoneLink type="near" zoneID="{3,16}" />-->
+			<!--<ZoneLink type="subZoneAway" zoneID="{8,16}" />-->
+		</ZoneLinks>
+	</Topology>
+	
+	<StructureElements>
+		<!--type: Core Axis Group Grid-->
+		<Groups>
+			<!--<Group id="0" minimizeWeight="-1" zoneID="{0,1,4}" lenToWidth="3"/>-->
+			<!--<Group id="1" minimizeWeight="1" zoneID="{11,12,13}" lenToWidth="3"/>-->
+		</Groups>
+		<Grids>
+			<xGrid id="0"  stroke="10">
+				<Domain xrange="{30,89}" yrange= "{16,21}"/>
+				<ControlZones zoneIDs="{0,1,2}" side="bottom"/>
+			</xGrid>
+		</Grids>
+		<!--<Core stroke="10">
+			<Domain xrange="{60,62}" yrange ="{21,24}" widthDomain ="{6,16}"	lengthDomain="{6,16}"/>
+			<minimizeWeight> -1</minimizeWeight>
+			<insideZone isOnly="true" isAlign="false" zoneID="{2,4}"></insideZone>
+		</Core>-->
+	</StructureElements>
+</configuration>

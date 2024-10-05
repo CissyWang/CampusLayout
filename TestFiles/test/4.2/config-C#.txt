@@ -1,0 +1,129 @@
+        int resultCount = 5; //解数
+        int grid = 20;             //运行单元大小
+        bool info=false;
+        #endregion
+        /// 计算指标部分
+        //string fileName1 = "E:/grasshopper_C#/test/4.3/mustBuilding1.csv";
+        //string fileName2 = "E:/grasshopper_C#/test/4.3/optionalBuilding1.csv";
+        //string exportPath = "E:/grasshopper_C#/test/4.3/exportN.csv";
+
+        /// 布局部分
+        //string siteCsv = "E:/grasshopper_C#/test/4.3/site.csv";//场地信息
+        string siteCsv = "E:/grasshopper_C#/test/4.2/site with entrance.csv";//场地信息
+        string zoneCsv = "E:/grasshopper_C#/test/4.2/export1.csv";//分区信息
+        //string zoneCsv = "E:/grasshopper_C#/test/4.3/exportN.csv"; //single
+        string locationCsv = "E:/grasshopper_C#/test/4.2/location4-3.csv";//分区位置——导出
+        double time =60; //运行时间
+        int searchMode =1;// （0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解）
+
+        override
+        public void SetUp()
+        {
+            #region***初始化设置***
+            //campus = new Campus((schoolType)4, 10000, 48.5, 1.0, fileName1, fileName2, exportPath);
+            //campus.Run();
+            //myCal = new Calculator(grid, siteCsv, campus,zoneCsv);
+
+            myCal = new Calculator(grid, siteCsv,zoneCsv, locationCsv);
+
+            myCal.ResultCount = resultCount;
+            myCal.PoolSearchMode = searchMode;
+            myCal.Time = time;
+            myCal.IsInteger = 0;
+            #endregion
+
+            #region 尺寸控制
+            myCal.LenToWidth(2);//长宽比（默认为3.0）
+
+            myCal.AreaFloats(1.0, 2);//设置父分区的面积范围
+            //myCal.AreaFloats(0, -0.1, 0.2);
+            //myCal.AreaFloats(1, -0.1, 0.2);
+            //myCal.AreaFloats(2, -0.1, 0.2);
+
+            //myCal.SetLayoutDensity(0.7);//设置总场地占用；
+            myCal.AreaSep(0.8);
+            myCal.Spacing(8);//间距
+
+            //设置最小长宽
+            myCal.SportArea(150, 200);
+            myCal.LengthMin(60);
+            //myCal.LengthMin(11,100);
+            //myCal.Zones[3].Length_min = 120/grid;
+            #endregion
+
+            #region 2.设置位置关系
+
+            myCal.RoadLink(11, "2");
+            myCal.RoadLink(12, "3");
+            myCal.RoadLink(13, "2");
+            myCal.RoadLink(10, "2");
+            myCal.RoadLink(14, "3");
+
+            myCal.PointLink(7, 0, "4");
+            myCal.PointLink(9, 0, "4");
+
+            myCal.PointLink(0, "0");
+            myCal.PointLink(1, "0");
+            myCal.PointLink(2, "0");
+
+            //myCal.PointLink(12, "3");
+            //myCal.PointLink(10, "3");
+
+            myCal.ZoneLink(12, 14);
+            myCal.ZoneLink(10, 13);
+
+            #endregion
+
+
+            ///***启动运行***
+            #region 3.中心区布局
+            myCal.Core_domain(new int[] { 24, 28 }, new int[] { 21, 24 }, new int[] { 6, 16}, new int[] { 16, 20 });
+            myCal.Core_Inside("4,7,9", true, true);//only or not
+            ////myCal.Core_Outside("3,",true);
+            myCal.CoreK(-1);
+            myCal.Core_width(1);
+            #endregion
+
+            #region 轴线式布局
+            //myCal.AddAxis(new Line[] { new Line(26, 0, 26, 39), new Line(37, 27, 53, 27) });
+            //myCal.VirtualAxis(0,new int[] {4,7,9 } , 7.5,false);
+            //myCal.RealAxis(0, new int[] { 11, 13 }, 0.8);
+            //myCal.RealAxis(1, new int[] { 0, 1,2}, 0.8);
+            //myCal.VirtualAxis(1, new int[] {  8 }, 7,false);
+
+            myCal.AddAxis(new Line[] { new Line(37, 27, 53, 27) });
+            myCal.RealAxis(0, new int[] { 0, 1, 2 }, 0.8);
+            #endregion
+
+            #region 多组团式布局
+            //myCal.SetGroup(0, new int[] {0,1,2,8 }, 0.6);
+            //myCal.SetGroup(1, new int[] {10,11,12,13,14}, 0.6);//增加Domain
+            #endregion
+
+            #region 网格式布局
+            myCal.AddGrid(new Domain[] { new Domain(8, 13), new Domain(0, 39) }, 0.5f, 1,
+                new int[] { 10, 11, 12, 13, 14 }, 0);//横向
+            //myCal.AddGrid(new Domain[] { new Domain(20, 23), new Domain(0, 39) }, 0.5f, 1);//横向
+            //myCal.AddGrid(new Domain[] { new Domain(12, 20), new Domain(0, 39) }, 0.5f, 0);//
+            //myCal.AddGrid(new Domain[] { new Domain(27, 35), new Domain(0, 22) }, 0.5f, 0);//
+
+            //中心区使用
+            //myCal.AddGrid(new Domain[] { new Domain(14,17), new Domain(0, 16) }, 0.5f, 1);
+            myCal.AddGrid(new Domain[] { new Domain(25, 27), new Domain(0,13) }, 0.5f, 0);
+            #endregion
+
+            myCal.runGRB("", 0.5, 1);
+            //myCal.runGRB("Axis,Group,Core,Grid", 1, 1);
+
+            myCal.ResponseExportCSV();//导出表格
+
+            #region 显示设置
+            //Smooth(8);
+            Size(800, 600);
+            cam = new CamController(this);
+            cam.FixZaxisRotation = true;
+            ColorMode(HSB);
+            font = CreateFont("微软雅黑", 24);
+            TextFont(font,0.5f*grid);
+            #endregion
+        }

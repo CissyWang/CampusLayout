@@ -13,7 +13,7 @@
 	<basic>
 		<unit>20</unit>
 		<resultCount>5</resultCount>
-		<time>50</time>
+		<time>200</time>
 		<!--searchMode:  0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解-->
 		<searchMode>2</searchMode>
 		<!--0=false, 1=true-->
@@ -21,31 +21,48 @@
 	</basic>
 	<filepath>
 		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
-		<zoneFile> ../../中文投稿/雄安大学城资料/export3.csv </zoneFile>
-		<siteFile>../../中文投稿/雄安大学城资料/siteC.csv</siteFile>
-		<locationFile>../../中文投稿/雄安大学城资料/location.csv</locationFile>
+		<zoneFile> ../../中文投稿/雄安大学城资料/export11.csv </zoneFile>
+		<siteFile>../../中文投稿/雄安大学城资料/siteA.csv</siteFile>
+		<locationFile>../../中文投稿/雄安大学城资料/location11-1.csv</locationFile>
 	</filepath>
 	<weights>
 		<areaWeight>1</areaWeight>
-		<distWeight>0</distWeight>
+		<distWeight>1</distWeight>
 	</weights>
 	<Shape>
 		<!--长宽比-->
 		<LenToWidth>2</LenToWidth>
 		<!--最小边长-->
-		<MinLength>60</MinLength>
+		<MinLength>60</MinLength>   
 		<!--间距-->
 		<Spacing>8</Spacing>
-		<AreaFloats min="1" max="1.12"/>
+		<AreaFloats min="0.9" max="1.2"/>
 		<AreaSep>0.8</AreaSep>
 		<!--密度-->
 		<!--<Density>0.7</Density>
 		<TotalArea>300000</TotalArea>-->
 	</Shape>
 	<Topology>
+		<PointLinks>
+			<PointLink zoneID="{0,2,4,7}" poiNum="4"/>
+		</PointLinks>
+		<RoadLinks>
+			<!--<RoadLink type="near" zoneID="{13,14,15}" roadNum="0"/>-->
+			<!--<RoadLink type="near" zoneID="{0,2,4,7}"  roadNum="2"/>-->
+		</RoadLinks>	
+		<ZoneLinks>
+			<ZoneLink type="near" zoneID="{3,16}" />
+			<ZoneLink type="near" zoneID="{8,9}" />
+		</ZoneLinks>
 	</Topology>
 	
 	<StructureElements>
 		<!--type: Core Axis Group Grid-->
+		<Grids>
+			<yGrid id="0"  stroke="0.5">
+				<Domain yrange= "{122,157}" xrange="{28,32}"/>
+				<ControlZones zoneIDs="{13,14,15}" side="left"/>
+			</yGrid>
+		</Grids>
 	</StructureElements>
 </configuration>
