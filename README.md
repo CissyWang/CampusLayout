@@ -94,45 +94,49 @@
  *这里有一个bug，定义要素的坐标和长宽采用的是图形缩小20倍后的值。但是输入的stroke、buffer是实际值*
     1. 中心区Core
       中心区设置为变量，因为需要考虑实际的布局情况
-        ```
-        <Core width="20">
-            <Domain xrange="{24,28}" yrange ="{21,24}" widthDomain ="{6,16}"	lengthDomain="{16,20}" stroke = "12"/> <!--指定中心区的坐标和长宽的范围-->
-            <!--或：<Domain xrange="{24,28}" yrange ="{21,24}"/> 只指定中心点坐标-->
-            <maximizeWeight>-1</maximizeWeight> <!--设定中心区最大化的权重，负数代表最小化-->
-            <insideZone isOnly="true" isAlign="true" zoneID="{4,7,9}"></insideZone> <!--设定中心区内部需要包含的分区，是否仅包含，以及是否需要近邻中心区边界-->
-            <outsideZone isAlign="1" zoneID="{1}"></outsideZone> <!--设定必须在中心区外部的分区，以及是否需要近邻中心区边界-->
-        </Core>
-        ```
+	```
+	<Core width="20">
+	    <Domain xrange="{24,28}" yrange ="{21,24}" widthDomain ="{6,16}"	lengthDomain="{16,20}" stroke = "12"/> <!--指定中心区的坐标和长宽的范围-->
+	    <!--或：<Domain xrange="{24,28}" yrange ="{21,24}"/> 只指定中心点坐标-->
+	    <maximizeWeight>-1</maximizeWeight> <!--设定中心区最大化的权重，负数代表最小化-->
+	    <insideZone isOnly="true" isAlign="true" zoneID="{4,7,9}"></insideZone> <!--设定中心区内部需要包含的分区，是否仅包含，以及是否需要近邻中心区边界-->
+	    <outsideZone isAlign="1" zoneID="{1}"></outsideZone> <!--设定必须在中心区外部的分区，以及是否需要近邻中心区边界-->
+	</Core>
+	```
     2. 轴线 Axes
       轴线为固定的常量
-      ```
-      <Axes>
-        <Axis id="0" startPt="{41.6,26}" endPt ="{41.6,59}" width="16"> <!--轴线id，位置，宽度，均为常量-->
-            <asRealAxis  zoneID="{3}"/> <!--作为实轴，呈现为道路的形式-->
-            <asAbstractAxis onCenter="true" buffer="200" zoneID="{0,3,5,11}"/> <!--作为虚轴，即分区的中心点在轴线上，或中心区在轴线偏移一定范围内-->
-        </Axis>
-	  </Axes>
-      ```
+	```
+	<Axes>
+		<Axis id="0" startPt="{41.6,26}" endPt ="{41.6,59}" width="16"> <!--轴线id，位置，宽度，均为常量-->
+		<asRealAxis  zoneID="{3}"/> <!--作为实轴，呈现为道路的形式-->
+		<asAbstractAxis onCenter="true" buffer="200" zoneID="{0,3,5,11}"/> <!--作为虚轴，即分区的中心点在轴线上，或中心区在轴线偏移一定范围内-->
+		</Axis>
+	</Axes>
+	```
     3. 组团Groups
-      ```
-      	<Groups>
-			<Group id="0" maximizeWeight="0.3" zoneID="{0,5,3,9}"/> <!--组团编号及包含的分区，最大化权重-->
-			<Group id="1" maximizeWeight="0.3" zoneID="{10,11,12}"/>
-		</Groups>
-      ```
+	```
+	<Groups>
+		<Group id="0" maximizeWeight="0.3" zoneID="{0,5,3,9}"/> <!--组团编号及包含的分区，最大化权重-->
+		<Group id="1" maximizeWeight="0.3" zoneID="{10,11,12}"/>
+	</Groups>
+	```
     5. 网格Grids
-    ```
-    <Grids>
-            <xGrid id="0"  stroke="10">
-                
-                    <Domain yrange= "{8,13}" xrange="{0,39}"/>
-                    <ControlZones zoneIDs="{10,11,12,13,14}" side="bottom"/>
-            </xGrid>
-            <yGrid id="0"  stroke="0.5">
-                <domain>
-                    <Domain yrange= "{8,13}" xrange="{0,39}"/>
-                </domain>
-            </yGrid>
-        </Grids>
-    ```
+       
+	```
+	<Grids>
+	    <xGrid id="0"  stroke="10"> <!--横向的网格线-->
+		    <Domain yrange= "{8,13}" xrange="{0,39}"/> <!--网格线y坐标的范围，端点x坐标值-->
+		    <ControlZones zoneIDs="{10,11,12,13,14}" side="bottom"/> <!--网格线控制分区的方式-->
+	    </xGrid>
+	    <yGrid id="0"  stroke="0.5"> <!--纵向的网格线-->
+		    <Domain yrange= "{8,13}" xrange="{0,39}"/> <!--网格线x坐标的范围，端点y坐标值-->
+	    </yGrid>
+	</Grids>
+	```
+ ## 4. 输出和呈现
+ - 在程序内可以简单呈现布局结果，
+   - key I ：显示指标信息
+   - key B ：显示建筑体量
+   - <- -> ：切换上一个/下一个结果
+- 输出的location.csv由grasshopper电池读取，可以呈现在Rhino中，利用编写好的电池进一步处理（ghConponent/*.gh）
 
