@@ -33,7 +33,7 @@ namespace User
         public void SetUp()
         {
             #region***初始化设置***
-            myCal = new Calculator(@"../Configuration/config4.3.xml");    
+            myCal = new Calculator(@"../Configuration/configXA_C.xml");    
             unit = myCal.Unit;
             resultCount = myCal.ResultCount;
             #endregion

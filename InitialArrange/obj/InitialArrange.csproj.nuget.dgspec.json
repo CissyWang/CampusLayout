@@ -4,21 +4,6 @@
     "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {}
   },
   "projects": {
-    "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj": {
-      "restore": {
-        "projectUniqueName": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj",
-        "projectName": "Configuration",
-        "projectPath": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj",
-        "frameworks": {
-          "net48": {
-            "projectReferences": {}
-          }
-        }
-      },
-      "frameworks": {
-        "net48": {}
-      }
-    },
     "E:\\grasshopper_C#\\Campus\\InitialArrange\\InitialArrange.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -42,11 +27,7 @@
         "frameworks": {
           "net48": {
             "targetAlias": "net48",
-            "projectReferences": {
-              "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj": {
-                "projectPath": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {

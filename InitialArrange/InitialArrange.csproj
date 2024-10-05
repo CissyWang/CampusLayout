@@ -45,20 +45,17 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Configuration.csproj" />
-  </ItemGroup>
-
-
-
-  <ItemGroup>
     <Reference Include="CampusClass">
-      <HintPath>..\..\CampusClass\CampusClass\bin\Release\CampusClass.dll</HintPath>
+      <HintPath>..\..\IndexCalculator-WPF\CampusClass\CampusClass\bin\Debug\CampusClass.dll</HintPath>
+      <Private>true</Private>
     </Reference>
     <Reference Include="Flowing">
       <HintPath>..\..\Flowing\Flowing\bin\Debug\Flowing.dll</HintPath>
+      <Private>true</Private>
     </Reference>
     <Reference Include="Gurobi95.NET">
       <HintPath>..\Solution\Gurobi95.NET.dll</HintPath>
+      <Private>true</Private>
     </Reference>
   </ItemGroup>
 

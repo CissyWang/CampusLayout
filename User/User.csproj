@@ -53,7 +53,7 @@
   <ItemGroup>
     <Reference Include="CampusClass, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CampusClass\CampusClass\bin\Release\CampusClass.dll</HintPath>
+      <HintPath>..\..\IndexCalculator-WPF\CampusClass\CampusClass\bin\Debug\CampusClass.dll</HintPath>
     </Reference>
     <Reference Include="Flowing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,7 +62,7 @@
     <Reference Include="OpenTK, Version=3.3.3.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Solution\OpenTK.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -94,10 +94,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Configuration.csproj">
-      <Project>{c04cf7fb-df92-469a-924a-2ca7ea20b2c7}</Project>
-      <Name>Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\InitialArrange\InitialArrange.csproj">
       <Project>{75c24b5f-e997-47f3-bd48-1c4817471bcf}</Project>
       <Name>InitialArrange</Name>

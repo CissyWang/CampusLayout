@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--unit: m-->
+<!--test 4.1 场地测试-->
+<!--问题记录
+*1.boundry保留两位小数比保留一位要快（结果不一样，数值差不多）
+*2.minus超出范围计算不出来
+ *3.不同的searchMode计算结果和耗时不一样：1最慢，0中等，2最快（由最优到满足限制）
+（0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解）
+*4.对面积（总面积）限制合理可以算得更快-->
+
+<configuration>
+
+	<basic>
+		<unit>20</unit>
+		<resultCount>5</resultCount>
+		<time>100</time>
+		<!--searchMode:  0专注最优解，1按数量搜索可行解并不保证质量，2系统搜索可行解-->
+		<searchMode>2</searchMode>
+		<!--0=false, 1=true-->
+		<isInteger> 0 </isInteger>
+	</basic>
+	<filepath>
+		<!--有子分区数量信息的表格，默认为1 之后有用户界面可修改。-->
+		<zoneFile> ../../中文投稿/雄安大学城资料/export22.csv </zoneFile>
+		<siteFile>../../中文投稿/雄安大学城资料/siteB.csv</siteFile>
+		<locationFile>../../中文投稿/雄安大学城资料/location22-3.csv</locationFile>
+	</filepath>
+	<weights>
+		<areaWeight>0</areaWeight>
+		<distWeight>1</distWeight>
+	</weights>
+	<Shape>
+		<!--长宽比-->
+		<LenToWidth>2</LenToWidth>
+		<!--最小边长-->
+		<MinLength>60</MinLength>   
+		<!--间距-->
+		<Spacing>8</Spacing>
+		<AreaFloats min="1" max="1.2"/>
+		<AreaSep>0.8</AreaSep>
+		<!--密度-->
+		<!--<Density>0.7</Density>
+		<TotalArea>300000</TotalArea>-->
+	</Shape>
+	<Topology>
+		<PointLinks>
+			<!--<PointLink zoneID="{2,4}" poiNum="0"/>-->
+		</PointLinks>
+		<RoadLinks>
+			<RoadLink type="oneSide" zoneID="{13,14,15}"  side="1" roadNum="3"/>
+			<!--<RoadLink type="oneSide" zoneID="{8,9}"  side="1" roadNum="3"/>-->
+		</RoadLinks>	
+		<ZoneLinks>
+			<ZoneLink type="near" zoneID="{8,9}" />
+			<ZoneLink type="near" zoneID="{3,16}" />
+			<!--<ZoneLink type="subZoneAway" zoneID="{8,16}" />-->
+		</ZoneLinks>
+	</Topology>
+	
+	<StructureElements>
+		<!--type: Core Axis Group Grid-->
+		<Axes>
+			<Axis id="0" startPt="{52,83}" endPt ="{96,83}" stroke="10"> 
+				<asRealAxis  zoneID="{0,2,4,7,1}"/>
+			</Axis>
+		</Axes>
+		<Groups>
+			<Group id="0" minimizeWeight="-1" zoneID="{0,1,2,4,7}" lenToWidth="3"/>
+		</Groups>
+		<!--<Grids>
+			<xGrid id="0"  stroke="10">
+				<Domain xrange="{52,96}" yrange= "{83,85}"/>
+			</xGrid>
+		</Grids>-->
+	</StructureElements>
+</configuration>

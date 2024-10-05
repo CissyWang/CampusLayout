@@ -48,15 +48,6 @@
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
         }
-      },
-      "Configuration/1.0.0": {
-        "type": "project",
-        "compile": {
-          "bin/placeholder/Configuration.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Configuration.dll": {}
-        }
       }
     }
   },
@@ -241,16 +232,10 @@
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
-    },
-    "Configuration/1.0.0": {
-      "type": "project",
-      "path": "../Configuration/Configuration.csproj",
-      "msbuildProject": "../Configuration/Configuration.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.8": [
-      "Configuration >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 17.3.2",
       "Newtonsoft.Json >= 13.0.3",
       "coverlet.collector >= 3.2.0"
@@ -282,11 +267,7 @@
       "frameworks": {
         "net48": {
           "targetAlias": "net48",
-          "projectReferences": {
-            "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj": {
-              "projectPath": "E:\\grasshopper_C#\\Campus\\Configuration\\Configuration.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
