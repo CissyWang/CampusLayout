@@ -18,8 +18,8 @@
 - 2.1 准备分区指标文件：.csv、.json,可由[指标计算器](https://github.com/CissyWang/IndexCalculator)自动生成。
   - csv文件用于提供分区的名称、面积、划分数量信息，在自动生成的csv表格最后一栏可填写每个分区要划分的数量，默认为1。
   - json文件用于提供分区内的建筑信息（可选，如果没有在生成结果中仅呈现地块布局，不呈现三维体量）
-- 2.2 准备场地文件：打开 /ghComponent/site.3dm，利用site组件读取几何图形并导出为.csv格式(建议改为json传输）。**pic**
-  - 注意：请先将将场地缩小unit倍数，默认为20（经测试，原尺寸运行程序好使较长）
+- 2.2 准备场地文件：打开 /ghComponent/site.3dm，利用site组件读取几何图形并导出为.csv格式(建议改为json传输）。**待补充图片**
+  - 注意：请先将将场地缩小unit倍数，默认为20（经测试，原尺寸运行程序耗时较长）
 ## 3.Config
 调试程序请打开Solution/TestProject1.sln,修改主程序ProgramNew.cs中指向config文件，并运行
 修改config.xml文件的参数含义：
