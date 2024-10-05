@@ -1,0 +1,435 @@
+[
+  {
+    "Site_area": 36480.0,
+    "Index": 0,
+    "Name": "公共教学区",
+    "Buildings": [
+      {
+        "Name": "教室",
+        "Layer": 5,
+        "Area_per": 2.88,
+        "Density": 0.3,
+        "Area": 54720.0,
+        "Site_area": 36480.0,
+        "Zone_name": "公共教学区",
+        "Floor_area": 10944.0,
+        "Index": 1,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 54720.0,
+    "Density": 0.3,
+    "PlotRatio": 1.5
+  },
+  {
+    "Site_area": 69424.0,
+    "Index": 1,
+    "Name": "专业教学区",
+    "Buildings": [
+      {
+        "Name": "实验实习用房",
+        "Layer": 5,
+        "Area_per": 5.0939999999999994,
+        "Density": 0.3,
+        "Area": 96785.999999999985,
+        "Site_area": 64524.0,
+        "Zone_name": "专业教学区",
+        "Floor_area": 19357.199999999997,
+        "Index": 2,
+        "AreaBias": 0.0
+      },
+      {
+        "Name": "实验研究用房(硕博)",
+        "Layer": 5,
+        "Area_per": 0.0,
+        "Density": 0.4,
+        "Area": 9800.0,
+        "Site_area": 4900.0,
+        "Zone_name": "专业教学区",
+        "Floor_area": 1960.0,
+        "Index": 1,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 106585.99999999999,
+    "Density": 0.31,
+    "PlotRatio": 1.54
+  },
+  {
+    "Site_area": 18449.5,
+    "Index": 2,
+    "Name": "图书馆",
+    "Buildings": [
+      {
+        "Name": "图书馆",
+        "Layer": 5,
+        "Area_per": 1.521,
+        "Density": 0.4,
+        "Area": 28899.0,
+        "Site_area": 14449.5,
+        "Zone_name": "图书馆",
+        "Floor_area": 5779.8,
+        "Index": 3,
+        "AreaBias": 0.0
+      },
+      {
+        "Name": "图书馆(硕博)",
+        "Layer": 5,
+        "Area_per": 0.0,
+        "Density": 0.4,
+        "Area": 8000.0,
+        "Site_area": 4000.0,
+        "Zone_name": "图书馆",
+        "Floor_area": 1600.0,
+        "Index": 2,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 36899.0,
+    "Density": 0.4,
+    "PlotRatio": 2.0
+  },
+  {
+    "Site_area": 29368.57,
+    "Index": 3,
+    "Name": "室内体育区",
+    "Buildings": [
+      {
+        "Name": "室内体育用房",
+        "Layer": 2,
+        "Area_per": 1.082,
+        "Density": 0.35,
+        "Area": 20558.0,
+        "Site_area": 29368.57,
+        "Zone_name": "室内体育区",
+        "Floor_area": 10279.0,
+        "Index": 4,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 20558.0,
+    "Density": 0.35,
+    "PlotRatio": 0.7
+  },
+  {
+    "Site_area": 5795.0,
+    "Index": 4,
+    "Name": "校级行政区",
+    "Buildings": [
+      {
+        "Name": "校级行政办公用房",
+        "Layer": 5,
+        "Area_per": 0.61,
+        "Density": 0.4,
+        "Area": 11590.0,
+        "Site_area": 5795.0,
+        "Zone_name": "校级行政区",
+        "Floor_area": 2318.0,
+        "Index": 5,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 11590.0,
+    "Density": 0.4,
+    "PlotRatio": 2.0
+  },
+  {
+    "Site_area": 11723.0,
+    "Index": 5,
+    "Name": "院系办公区",
+    "Buildings": [
+      {
+        "Name": "院系及教师办公用房",
+        "Layer": 5,
+        "Area_per": 1.234,
+        "Density": 0.4,
+        "Area": 23446.0,
+        "Site_area": 11723.0,
+        "Zone_name": "院系办公区",
+        "Floor_area": 4689.2,
+        "Index": 6,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 23446.0,
+    "Density": 0.4,
+    "PlotRatio": 2.0
+  },
+  {
+    "Site_area": 8278.57,
+    "Index": 6,
+    "Name": "学生活动区",
+    "Buildings": [
+      {
+        "Name": "师生活动用房",
+        "Layer": 2,
+        "Area_per": 0.305,
+        "Density": 0.35,
+        "Area": 5795.0,
+        "Site_area": 8278.57,
+        "Zone_name": "学生活动区",
+        "Floor_area": 2897.5,
+        "Index": 7,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 5795.0,
+    "Density": 0.35,
+    "PlotRatio": 0.7
+  },
+  {
+    "Site_area": 6677.14,
+    "Index": 7,
+    "Name": "会堂",
+    "Buildings": [
+      {
+        "Name": "会堂",
+        "Layer": 2,
+        "Area_per": 0.246,
+        "Density": 0.35,
+        "Area": 4674.0,
+        "Site_area": 6677.14,
+        "Zone_name": "会堂",
+        "Floor_area": 2337.0,
+        "Index": 8,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 4674.0,
+    "Density": 0.35,
+    "PlotRatio": 0.7
+  },
+  {
+    "Site_area": 186580.65,
+    "Index": 8,
+    "Name": "学生宿舍区",
+    "Buildings": [
+      {
+        "Name": "学生宿舍(公寓）",
+        "Layer": 5,
+        "Area_per": 10.0,
+        "Density": 0.31,
+        "Area": 190000.0,
+        "Site_area": 122580.65,
+        "Zone_name": "学生宿舍区",
+        "Floor_area": 38000.0,
+        "Index": 9,
+        "AreaBias": 0.0
+      },
+      {
+        "Name": "研究生校舍",
+        "Layer": 5,
+        "Area_per": 0.0,
+        "Density": 0.25,
+        "Area": 80000.0,
+        "Site_area": 64000.0,
+        "Zone_name": "学生宿舍区",
+        "Floor_area": 16000.0,
+        "Index": 3,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 270000.0,
+    "Density": 0.29,
+    "PlotRatio": 1.45
+  },
+  {
+    "Site_area": 32707.14,
+    "Index": 9,
+    "Name": "食堂",
+    "Buildings": [
+      {
+        "Name": "食堂",
+        "Layer": 2,
+        "Area_per": 1.205,
+        "Density": 0.35,
+        "Area": 22895.0,
+        "Site_area": 32707.14,
+        "Zone_name": "食堂",
+        "Floor_area": 11447.5,
+        "Index": 10,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 22895.0,
+    "Density": 0.35,
+    "PlotRatio": 0.7
+  },
+  {
+    "Site_area": 7200,
+    "Index": 10,
+    "Name": "教师公寓区",
+    "Buildings": [
+      {
+        "Name": "单身教师宿舍(公寓）",
+        "Layer": 8,
+        "Area_per": 0.4,
+        "Density": 0.25,
+        "Area": 15200,
+        "Site_area": 7200,
+        "Zone_name": "教师公寓区",
+        "Floor_area": 1900,
+        "Index": 11,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 7600.0,
+    "Density": 0.25,
+    "PlotRatio": 2.0
+  },
+  {
+    "Site_area":21578.57,
+    "Index": 11,
+    "Name": "后勤区",
+    "Buildings": [
+      {
+        "Name": "后勤及附属用房",
+        "Layer": 2,
+        "Area_per": 1.59,
+        "Density": 0.35,
+        "Area": 15105.0,
+        "Site_area": 21578.57,
+        "Zone_name": "后勤区",
+        "Floor_area": 7552.5,
+        "Index": 12,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 30210.0,
+    "Density": 0.35,
+    "PlotRatio": 0.7
+  },
+  {
+    "Site_area": 17333.34,
+    "Index": 12,
+    "Name": "国际学生区",
+    "Buildings": [
+      {
+        "Name": "留学生及外教生活用房",
+        "Layer": 5,
+        "Area_per": 0.0,
+        "Density": 0.3,
+        "Area": 26000,
+        "Site_area": 17333.34,
+        "Zone_name": "国际学生区",
+        "Floor_area": 5200,
+        "Index": 4,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 13000.0,
+    "Density": 0.3,
+    "PlotRatio": 1.5
+  },
+  {
+    "Site_area": 16666.67,
+    "Index": 13,
+    "Name": "培训教育区",
+    "Buildings": [
+      {
+        "Name": "培训工作用房",
+        "Layer": 5,
+        "Area_per": 0.0,
+        "Density": 0.3,
+        "Area": 10000.0,
+        "Site_area": 6666.67,
+        "Zone_name": "培训教育区",
+        "Floor_area": 2000.0,
+        "Index": 5,
+        "AreaBias": 0.0
+      },
+      {
+        "Name": "对外继续教育",
+        "Layer": 5,
+        "Area_per": 0.0,
+        "Density": 0.4,
+        "Area": 20000.0,
+        "Site_area": 10000.0,
+        "Zone_name": "培训教育区",
+        "Floor_area": 4000.0,
+        "Index": 8,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 30000.0,
+    "Density": 0.36,
+    "PlotRatio": 1.8
+  },
+  {
+    "Site_area": 10000.0,
+    "Index": 14,
+    "Name": "学术交流区",
+    "Buildings": [
+      {
+        "Name": "学术交流中心(即综合性接待宾馆)",
+        "Layer": 10,
+        "Area_per": 0.0,
+        "Density": 0.3,
+        "Area": 30000.0,
+        "Site_area": 10000.0,
+        "Zone_name": "学术交流区",
+        "Floor_area": 3000.0,
+        "Index": 6,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 30000.0,
+    "Density": 0.3,
+    "PlotRatio": 3.0
+  },
+  {
+    "Site_area": 78333.33,
+    "Index": 15,
+    "Name": "产学融合区",
+    "Buildings": [
+      {
+        "Name": "重点实验室、教学陈列、创业基地",
+        "Layer": 6,
+        "Area_per": 0.0,
+        "Density": 0.4,
+        "Area": 68000.0,
+        "Site_area": 28333.33,
+        "Zone_name": "产学融合区",
+        "Floor_area": 11333.333333333334,
+        "Index": 7,
+        "AreaBias": 0.0
+      },
+      {
+        "Name": "创研中心",
+        "Layer": 6,
+        "Area_per": 0.0,
+        "Density": 0.4,
+        "Area": 60000.0,
+        "Site_area": 25000.0,
+        "Zone_name": "产学融合区",
+        "Floor_area": 10000.0,
+        "Index": 9,
+        "AreaBias": 0.0
+      },
+      {
+        "Name": "研发、产学研",
+        "Layer": 6,
+        "Area_per": 0.0,
+        "Density": 0.4,
+        "Area": 60000.0,
+        "Site_area": 25000.0,
+        "Zone_name": "产学融合区",
+        "Floor_area": 10000.0,
+        "Index": 10,
+        "AreaBias": 0.0
+      }
+    ],
+    "BuildingArea": 188000.0,
+    "Density": 0.4,
+    "PlotRatio": 2.4
+  },
+  {
+    "Site_area": 152000.0,
+    "Index": 16,
+    "Name": "户外体育区",
+    "Buildings": null,
+    "BuildingArea": 0.0,
+    "Density": 0.0,
+    "PlotRatio": 0.0
+  }
+]
