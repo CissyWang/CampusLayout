@@ -14,7 +14,7 @@
 - 利用商业求解器[Gurobi](https://www.gurobi.com/academia/academic-program-and-licenses/)求解二次规划问题，引用gurobi95，需要先在官网申请Token
 - 程序内部的可视化依赖[Flowing](https://github.com/ds199895/Flowing)。另外，输出文件可由编写好的Grasshopper组件读取，在Rhino中呈现（见ghComponents/）。**待补充图片**
 - 所有程序调试的参数config.xml文件当中，在Configuration文件夹下放置了一些测试示例。
-
+- 引用的类库CampusClass.dll是与指标计算器共用的一些类，源代码见[指标计算器](https://github.com/CissyWang/IndexCalculator)
 ## 2.Preparation
 - 2.1 准备分区指标文件：.csv、.json,可由[指标计算器](https://github.com/CissyWang/IndexCalculator)自动生成。
   - csv文件用于提供分区的名称、面积、划分数量信息，在自动生成的csv表格最后一栏可填写每个分区要划分的数量，默认为1。
