@@ -4,7 +4,8 @@
 - 该程序将场地布局问题抽象为二次规划模型，输入场地中有指标要求的功能分区列表、和布局的要求，输出布局结果。
 - 其中，每个功能分区可以划分为多个矩形地块，求解时作为基本单元，地块的坐标和长宽为模型的变量。
 - 布局的要求包括：每个功能的面积、长宽比的形态要求，功能之间的拓扑关系，不同场地和功能对场地要素的响应，以及布局结构
-- 参考文章：[Urban Site Adaptive Layout Generation: User- Configurable Algorithms Based on MQP](https://www.caadria2024.org/wp-content/uploads/2024/04/212-URBAN-SITE-ADAPTIVE-LAYOUT-GENERATION.pdf#:~:text=To%20accommodate%20real-world%20site%20conditions,%20this%20study%20explores%20site%20layout)
+- 文章地址：[Urban Site Adaptive Layout Generation: User- Configurable Algorithms Based on MQP](https://www.caadria2024.org/wp-content/uploads/2024/04/212-URBAN-SITE-ADAPTIVE-LAYOUT-GENERATION.pdf#:~:text=To%20accommodate%20real-world%20site%20conditions,%20this%20study%20explores%20site%20layout) 感谢引用
+- 
 - 应用对象主要为大学校园，功能指标列表可由大学校园[指标计算器](https://github.com/CissyWang/IndexCalculator)生成
 <img src="https://archialgo-com-sources.oss-cn-hangzhou.aliyuncs.com/images/Figure3.jpg" alt="示例图片" style="width: 500px; height: auto;">
 <img src="https://archialgo-com-sources.oss-cn-hangzhou.aliyuncs.com/images/Fig5.jpg" alt="示例图片" style="width: 500px; height: auto;">
