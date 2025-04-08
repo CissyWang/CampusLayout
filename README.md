@@ -12,14 +12,15 @@
 
 ## 1.Reference & Configuration
 - 利用商业求解器[Gurobi](https://www.gurobi.com/academia/academic-program-and-licenses/)求解二次规划问题，引用gurobi95，需要先在官网申请Token
-- 程序内部的可视化依赖[Flowing](https://github.com/ds199895/Flowing)。另外，输出文件可由编写好的Grasshopper组件读取，在Rhino中呈现（见ghComponents/）。**待补充图片**
+- 程序内部的可视化依赖[Flowing](https://github.com/ds199895/Flowing)。另外，输出文件可由编写好的Grasshopper组件读取，在Rhino中呈现（见ghComponents/写入分区）。
+	
 - 所有程序调试的参数config.xml文件当中，在Configuration文件夹下放置了一些测试示例。
 - 引用的类库CampusClass.dll是与指标计算器共用的一些类，源代码见[指标计算器](https://github.com/CissyWang/IndexCalculator)
 ## 2.Preparation
 - 2.1 准备分区指标文件：.csv、.json,可由[指标计算器](https://github.com/CissyWang/IndexCalculator)自动生成。
   - csv文件用于提供分区的名称、面积、划分数量信息，在自动生成的csv表格最后一栏可填写每个分区要划分的数量，默认为1。
   - json文件用于提供分区内的建筑信息（可选，如果没有在生成结果中仅呈现地块布局，不呈现三维体量）
-- 2.2 准备场地文件：打开 /ghComponent/site.3dm，利用site组件读取几何图形并导出为.csv格式(建议改为json传输）。**待补充图片**
+- 2.2 准备场地文件：打开"/ghComponent/site.3dm"以及"写入分区.gh"，利用site组件读取几何图形并导出为.csv格式(建议后续改为json传输）。
   - 注意：请先将将场地缩小unit倍数，默认为20（经测试，原尺寸运行程序耗时较长）
 ## 3.Config
 调试程序请打开Solution/TestProject1.sln,修改主程序ProgramNew.cs中指向config文件，并运行
@@ -37,9 +38,9 @@
 - 3.2 文件位置<filepath>：
   ```
   <filepath>
-        <zoneFile> ../../南工职大/应用/export1.2-0.csv </zoneFile> <!--有分区信息表格，后续利用用户界面修改。-->
-        <siteFile>../../南工职大/应用/site0.csv</siteFile> <!--场地信息表格，后续利用用户界面修改。-->
-        <locationFile>../../location_newtest.csv</locationFile> <!--输出的是存储了计算结果的location.csv以及在同一地址下会存储求解的log文件，csv由自主编写的gh电池读取后可以在Rhino中呈现布局（建议改成json传输）。-->
+        <zoneFile> ../TestFiles/南工职大/应用/export1.2-0.csv </zoneFile> <!--有分区信息表格，后续利用用户界面修改。-->
+        <siteFile>../TestFiles/南工职大/应用/site0.csv</siteFile> <!--场地信息表格，后续利用用户界面修改。-->
+        <locationFile>../TestFiles/location_newtest.csv</locationFile> <!--输出的是存储了计算结果的location.csv以及在同一地址下会存储求解的log文件，csv由自主编写的gh电池读取后可以在Rhino中呈现布局（建议改成json传输）。-->
   </filepath>
   ```
 - 3.3 目标权重<weights>
@@ -139,5 +140,8 @@
    - key I ：显示指标信息
    - key B ：显示建筑体量
    - <- -> ：切换上一个/下一个结果
-- 输出的location.csv由grasshopper电池读取，可以呈现在Rhino中，利用编写好的电池进一步处理（ghConponent/*.gh）
+- 输出的location.csv由grasshopper电池读取，可以呈现在Rhino中，利用编写好的电池进一步处理
+ 	- 利用电池组读取分区信息
+  	- 安装ghConponent/MultiAgent.gha，利用MultiAgent电池动态调整分区边界（可选）
+  	- 呈现分区和建筑的体量和信息	 
 
